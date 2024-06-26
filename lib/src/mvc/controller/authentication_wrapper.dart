@@ -11,8 +11,8 @@ import '../view/screens.dart';
 /// - `UpdateScreen`: displayed when the remote config indicates that there is a new update for the app
 /// - `BreakScreen`: displayed when the remote config indicates that the app or our servers are under maintenance
 /// - `MainScreen`: displayed when non of the above conditions are satisfied
-class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({
+class AuthenticationWrapper extends StatefulWidget {
+  const AuthenticationWrapper({
     super.key,
     required this.settingsController,
   });
@@ -21,10 +21,10 @@ class AuthWrapper extends StatefulWidget {
   final SettingsController settingsController;
 
   @override
-  State<AuthWrapper> createState() => _AuthWrapperState();
+  State<AuthenticationWrapper> createState() => _AuthenticationWrapperState();
 }
 
-class _AuthWrapperState extends State<AuthWrapper> {
+class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
   @override
   void initState() {
     super.initState();
@@ -41,6 +41,14 @@ class _AuthWrapperState extends State<AuthWrapper> {
         if (userSession.isAwaiting) {
           return SplashScreen(
             exception: userSession.error,
+          );
+        }
+        if (userSession.isUnauthenticated ||
+            (userSession.isAuthenticated &&
+                userSession.emailVerified == false)) {
+          return AuthenticationRouter(
+            userSession: userSession,
+            settingsController: widget.settingsController,
           );
         }
         return MainScreen(

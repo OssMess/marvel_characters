@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'mvc/controller/auth_wrapper.dart';
+import 'mvc/controller/authentication_wrapper.dart';
 import 'settings/settings_controller.dart';
 import 'tools/styles.dart';
 
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               darkTheme: getDarkTheme(),
               themeMode: settingsController.themeMode,
               locale: settingsController.localeMode,
-              home: AuthWrapper(
+              home: AuthenticationWrapper(
                 settingsController: settingsController,
               ),
             );

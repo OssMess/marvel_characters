@@ -15,3 +15,6 @@ export './model_widgets/custom_secondary_button.dart';
 export './model_widgets/custom_text_button.dart';
 export './model_widgets/custom_text_form_field.dart';
 export './model_widgets/custom_trailing_tile.dart';
+export './model_widgets/custom_screen_header.dart';
+export './model_widgets/custom_authentication_button.dart';
+export './model_widgets/custom_floating_flat_action_button.dart';

@@ -1,1 +1,25 @@
-{}
+{
+  "fr": [
+    "please_read_accept_terms_of_user",
+    "please_confirm_your_password",
+    "you_already_have_an_account",
+    "signin",
+    "register",
+    "i_read_accept",
+    "terms_of_user",
+    "and",
+    "privacy_policy",
+    "confirm_password",
+    "password",
+    "email",
+    "register_hint",
+    "signin_hint",
+    "forgot_your_password",
+    "you_dont_have_an_account",
+    "reset_password",
+    "reset_password_hint",
+    "send",
+    "you_recovered_your_password",
+    "a_link_has_been_sent_to_your_email"
+  ]
+}
