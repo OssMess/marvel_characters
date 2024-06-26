@@ -108,6 +108,7 @@ class _SigninState extends State<Signin> {
   }
 
   Future<void> next() async {
+    FocusScope.of(context).unfocus();
     if (emailError.isNotNullOrEmpty || passwordError.isNotNullOrEmpty) {
       setState(() {
         emailError = null;

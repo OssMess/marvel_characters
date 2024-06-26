@@ -164,6 +164,7 @@ class _RegisterState extends State<Register> {
   }
 
   Future<void> next() async {
+    FocusScope.of(context).unfocus();
     if (emailError.isNotNullOrEmpty ||
         passwordError.isNotNullOrEmpty ||
         passwordRetypeError.isNotNullOrEmpty) {

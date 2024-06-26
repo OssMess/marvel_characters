@@ -61,6 +61,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   Future<void> next() async {
+    FocusScope.of(context).unfocus();
     if (emailError.isNotNullOrEmpty) {
       setState(() {
         emailError = null;
