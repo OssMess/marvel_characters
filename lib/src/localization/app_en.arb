@@ -1,5 +1,5 @@
 {
-  "appTitle": "Flutter Skeleton App",
+  "appTitle": "Marvel Characters",
 
   "please_read_accept_terms_of_user":"Please read and agree to the Terms of Use and Privacy Policy!",
   "please_confirm_your_password":"Please confirm your password!",
@@ -22,6 +22,8 @@
   "send":"Send",
   "you_recovered_your_password":"You recovered your password?",
   "a_link_has_been_sent_to_your_email":"A link has been sent to your email, use it to reset your password.",
+  "signout":"Signout",
+  "signout_hint":"Are you sure you would like to signout?",
 
   "sign_in_canceled":"Authentication operation has been canceled",
   "account_exists_with_different_credential":"Sign in using a different method",
@@ -66,14 +68,14 @@
   "account_exists_with_different_credential":"Sign in using the provider associated with this email.",
 
   "dialog_title_permission_required":"Permission required",
-  "dialog_content_permission_camera_android":"Flutter Skeleton App requires access to your camera to take upload and photos.",
-  "dialog_content_permission_camera_ios":"To be able to take and upload photos, go to Settings > Privacy > Camera > Flutter Skeleton App > All Photos.",
-  "dialog_content_permission_location_android":"Flutter Skeleton App requires access to your location to retrieve location address.",
-  "dialog_content_permission_location_ios":"To be able to pick your current location address,  go to Settings > Privacy > Location Services> Flutter Skeleton App > Enable.",
-  "dialog_content_permission_microphone_android":"Flutter Skeleton App requires access to microphone to record videos.",
-  "dialog_content_permission_microphone_ios":"To be able to record videos, go to Settings > Privacy > Microphone > Flutter Skeleton App > Enable.",
-  "dialog_content_permission_photos_android":"Flutter Skeleton App requires access to your photo library to upload photos to your profile and posts.",
-  "dialog_content_permission_photos_ios":"To be able to upload photos to your profile and posts, go to Settings > Privacy > Photos > Flutter Skeleton App > All Photos.",
+  "dialog_content_permission_camera_android":"Marvel Characters requires access to your camera to take upload and photos.",
+  "dialog_content_permission_camera_ios":"To be able to take and upload photos, go to Settings > Privacy > Camera > Marvel Characters > All Photos.",
+  "dialog_content_permission_location_android":"Marvel Characters requires access to your location to retrieve location address.",
+  "dialog_content_permission_location_ios":"To be able to pick your current location address,  go to Settings > Privacy > Location Services> Marvel Characters > Enable.",
+  "dialog_content_permission_microphone_android":"Marvel Characters requires access to microphone to record videos.",
+  "dialog_content_permission_microphone_ios":"To be able to record videos, go to Settings > Privacy > Microphone > Marvel Characters > Enable.",
+  "dialog_content_permission_photos_android":"Marvel Characters requires access to your photo library to upload photos to your profile and posts.",
+  "dialog_content_permission_photos_ios":"To be able to upload photos to your profile and posts, go to Settings > Privacy > Photos > Marvel Characters > All Photos.",
   "dialog_content_enable_location_android":"Enable your device location to display your location on the map.",
   "dialog_content_enable_location_ios":"Enable your device location to display your location on the map.",
   

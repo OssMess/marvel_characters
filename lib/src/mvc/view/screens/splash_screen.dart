@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_skeleton/src/mvc/view/model_widgets/buttons/custom_text_button.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:badges/badges.dart' as badge;
@@ -32,14 +34,23 @@ class SplashScreen extends StatelessWidget {
             1.sw.width,
             const Spacer(),
             if (exception == null) ...[
-              Image.asset(
-                'assets/images/splashscreen_logo.png',
+              Container(
                 height: 330.sp,
-                width: 0.8.sw,
-                fit: BoxFit.contain,
-                alignment: Alignment.center,
+                width: 330.sp,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.sp),
+                  image: const DecorationImage(
+                    image: AssetImage(
+                      'assets/images/logo.png',
+                    ),
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
               SizedBox(height: 90.sp),
+              SpinKitCubeGrid(
+                color: Colors.red,
+              ),
             ],
             if (exception != null) ...[
               const Spacer(flex: 2),

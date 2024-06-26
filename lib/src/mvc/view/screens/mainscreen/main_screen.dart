@@ -1,3 +1,4 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../../../../main.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
-import '../../../model/change_notifiers.dart';
+import '../../../model/enums.dart';
 import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 
@@ -29,8 +30,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  NotifierInt notifierMessages = NotifierInt(-1);
-  late Stream<bool> streamNotifications;
 
   @override
   void initState() {
@@ -81,20 +80,28 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  // @override
-  // void deactivate() {
-  //   try {
-  //     CacheUsersPresence.closeAllStreams();
-  //   } catch (e) {
-  //     //todo
-  //   }
-  //   super.deactivate();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () => Dialogs.of(context).showAlertDialog(
+              dialogState: DialogState.confirmation,
+              subtitle: AppLocalizations.of(context)!.signout_hint,
+              onContinue: () => Dialogs.of(context).runAsyncAction(
+                future: widget.user.signOut,
+              ),
+              continueLabel: AppLocalizations.of(context)!.signout,
+            ),
+            visualDensity: VisualDensity.compact,
+            icon: const Icon(
+              AwesomeIconsLight.arrow_right_from_bracket,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
