@@ -1,3 +1,4 @@
+import '../../controller/services.dart';
 import '../list_models.dart';
 import '../models.dart';
 
@@ -6,15 +7,8 @@ class ListCharacters extends SetApiPaginationClasses<Character> {
 
   @override
   Future<void> get({
-    required int page,
     required bool refresh,
-    required void Function(
-      Set<Character> list,
-      int total,
-      bool hasError,
-      bool refresh,
-    ) update,
   }) {
-    throw UnimplementedError();
+    return APICharactersService().list(listCharacters: this, refresh: refresh);
   }
 }

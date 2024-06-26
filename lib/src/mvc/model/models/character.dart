@@ -1,5 +1,5 @@
 class Character {
-  final String id;
+  final int id;
   final String name;
   final String description;
   final String modified;
@@ -55,8 +55,8 @@ class Character {
 }
 
 class Comics {
-  final String available;
-  final String returned;
+  final int available;
+  final int returned;
   final String collectionUri;
   final List<ComicsItem> items;
 
@@ -104,8 +104,8 @@ class ComicsItem {
 }
 
 class Stories {
-  final String available;
-  final String returned;
+  final int available;
+  final int returned;
   final String collectionUri;
   final List<StoriesItem> items;
 

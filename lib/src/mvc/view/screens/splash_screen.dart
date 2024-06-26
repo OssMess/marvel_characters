@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_skeleton/src/mvc/view/model_widgets/buttons/custom_text_button.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:badges/badges.dart' as badge;
 
 import '../../../tools.dart';
+import '../../model/models.dart';
+import '../../model/models_ui.dart';
+import '../model_widgets.dart';
 
 /// Splash screen, it shows when the app is opened and is still preparing data
 class SplashScreen extends StatelessWidget {
   const SplashScreen({
     super.key,
+    required this.userSession,
     this.exception,
   });
 
-  /// user session
+  final UserSession userSession;
   final Exception? exception;
 
   @override
@@ -79,10 +84,14 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(flex: 3),
-              // CustomElevatedButton(
-              //   label: AppLocalizations.of(context)!.logout,
-              //   onPressed: userSession.signOut,
-              // ),
+              if (userSession.isAuthenticated)
+                CustomTextButton(
+                  button: ModelTextButton(
+                    label: AppLocalizations.of(context)!.logout,
+                    onPressed: userSession.signOut,
+                    color: context.primaryColor,
+                  ),
+                ),
             ],
             const Spacer(),
             FutureBuilder(

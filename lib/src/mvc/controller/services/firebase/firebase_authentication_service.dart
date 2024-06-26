@@ -9,7 +9,7 @@ import '../../../model/firestore_path.dart';
 import '../../../model/models.dart';
 import '../../services.dart';
 
-class AuthenticationService {
+class FirebaseAuthenticationService {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -111,9 +111,6 @@ class AuthenticationService {
       user: userCredential.user!,
       userSession: userSession,
     );
-    if (!userCredential.user!.emailVerified) {
-      userCredential.user!.sendEmailVerification();
-    }
   }
 
   /// On user signs in, first update AuthState to `awaiting` to
@@ -157,7 +154,7 @@ class AuthenticationService {
       password: password,
     );
     if (userCredential.user != null) {
-      AuthenticationService.onSignInWithCredential(
+      FirebaseAuthenticationService.onSignInWithCredential(
         userCredential: userCredential,
         userSession: userSession,
       );
@@ -176,7 +173,7 @@ class AuthenticationService {
       password: password,
     );
     if (userCredential.user != null) {
-      AuthenticationService.onSignInWithCredential(
+      FirebaseAuthenticationService.onSignInWithCredential(
         userCredential: userCredential,
         userSession: userSession,
       );

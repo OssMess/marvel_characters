@@ -61,17 +61,13 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     if (isLoading) return;
     isLoading = true;
     await get(
-      page: currentPage,
       refresh: false,
-      update: update,
     );
   }
 
   /// call get to retrieve data from backend.
   Future<void> get({
-    required int page,
     required bool refresh,
-    required void Function(Set<T>, int, bool, bool) update,
   });
 
   /// Get more data, uses pagination.
@@ -80,9 +76,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     if (isLoading) return;
     isLoading = true;
     await get(
-      page: currentPage,
       refresh: false,
-      update: update,
     );
   }
 
@@ -94,9 +88,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     hasError = false;
     isLoading = true;
     await get(
-      page: currentPage,
       refresh: true,
-      update: update,
     );
   }
 

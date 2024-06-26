@@ -116,7 +116,7 @@ class _SigninState extends State<Signin> {
       });
     }
     await Dialogs.of(context).runAsyncAction(
-      future: () => AuthenticationService.signInWithEmailAndPassword(
+      future: () => FirebaseAuthenticationService.signInWithEmailAndPassword(
         userSession: widget.userSession,
         email: email!,
         password: password!,

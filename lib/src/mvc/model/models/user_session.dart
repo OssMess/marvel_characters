@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +15,6 @@ class UserSession with ChangeNotifier {
   String uid;
   String? token;
   String? email;
-  bool? emailVerified;
-  String? displayName;
-  CachedNetworkImageProvider? photo;
-  String? photoUrl;
   DateTime? updatedAt;
   DateTime? createdAt;
 
@@ -29,10 +24,6 @@ class UserSession with ChangeNotifier {
     required this.uid,
     required this.token,
     required this.email,
-    required this.emailVerified,
-    required this.displayName,
-    required this.photo,
-    required this.photoUrl,
     required this.updatedAt,
     required this.createdAt,
   });
@@ -45,10 +36,6 @@ class UserSession with ChangeNotifier {
         uid: '',
         token: null,
         email: null,
-        emailVerified: null,
-        displayName: null,
-        photo: null,
-        photoUrl: null,
         updatedAt: null,
         createdAt: null,
       );
@@ -60,10 +47,6 @@ class UserSession with ChangeNotifier {
         uid: '',
         token: null,
         email: null,
-        emailVerified: null,
-        displayName: null,
-        photo: null,
-        photoUrl: null,
         updatedAt: null,
         createdAt: null,
       );
@@ -80,12 +63,6 @@ class UserSession with ChangeNotifier {
         uid: userCredential.user!.uid,
         token: token,
         email: userCredential.user!.email,
-        emailVerified: userCredential.user!.emailVerified,
-        displayName: userCredential.user!.displayName,
-        photo: userCredential.user!.photoURL != null
-            ? CachedNetworkImageProvider(userCredential.user!.photoURL!)
-            : null,
-        photoUrl: userCredential.user!.photoURL,
         updatedAt: DateTime.now(),
         createdAt: DateTime.now(),
       );
@@ -101,12 +78,6 @@ class UserSession with ChangeNotifier {
         uid: user.uid,
         token: token,
         email: user.email,
-        emailVerified: user.emailVerified,
-        displayName: user.displayName,
-        photo: user.photoURL != null
-            ? CachedNetworkImageProvider(user.photoURL!)
-            : null,
-        photoUrl: user.photoURL,
         updatedAt: DateTime.now(),
         createdAt: DateTime.now(),
       );
@@ -122,13 +93,7 @@ class UserSession with ChangeNotifier {
       error: null,
       uid: user.uid,
       email: user.email ?? json['email'],
-      emailVerified: user.emailVerified,
-      displayName: user.displayName ?? json['displayName'],
       token: json['token'],
-      photoUrl: json['photoUrl'],
-      photo: json['photoUrl'] != null
-          ? CachedNetworkImageProvider(json['photoUrl'])
-          : null,
       createdAt: DateTimeUtils.getDateTimefromTimestamp(json['createdAt']),
       updatedAt: DateTimeUtils.getDateTimefromTimestamp(json['updatedAt']),
     );
@@ -142,8 +107,6 @@ class UserSession with ChangeNotifier {
         'uid': uid,
         'email': email,
         'token': token,
-        'displayName': displayName,
-        'photoUrl': photoUrl,
         //initial params in userData document
         'updateKey': 0,
         'updatedAt': FieldValue.serverTimestamp(),
@@ -166,10 +129,6 @@ class UserSession with ChangeNotifier {
     uid = update.uid;
     token = update.token;
     email = update.email;
-    emailVerified = update.emailVerified;
-    displayName = update.displayName;
-    photo = update.photo;
-    photoUrl = update.photoUrl;
     updatedAt = update.updatedAt;
     createdAt = update.createdAt;
     notifyListeners();
@@ -185,7 +144,7 @@ class UserSession with ChangeNotifier {
         } else {
           try {
             UserSession userdata =
-                await AuthenticationService.userFromFirebaseUser(user);
+                await FirebaseAuthenticationService.userFromFirebaseUser(user);
             copyFromUserSession(userdata);
           } on Exception catch (e) {
             updateException(e);
@@ -196,15 +155,6 @@ class UserSession with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await AuthenticationService.signOut(this);
-  }
-
-  Future<void> refreshisEmailVerified() async {
-    if (FirebaseAuth.instance.currentUser == null) return;
-    await FirebaseAuth.instance.currentUser!.reload();
-    emailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    if (emailVerified == true) {
-      notifyListeners();
-    }
+    await FirebaseAuthenticationService.signOut(this);
   }
 }

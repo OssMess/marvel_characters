@@ -68,7 +68,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       });
     }
     await Dialogs.of(context).runAsyncAction(
-      future: () => AuthenticationService.sendPasswordResetEmail(email: email!),
+      future: () =>
+          FirebaseAuthenticationService.sendPasswordResetEmail(email: email!),
       onCompleteMessage:
           AppLocalizations.of(context)!.a_link_has_been_sent_to_your_email,
       dialogType: DialogType.snackbar,

@@ -19,7 +19,7 @@ class CustomTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var textColor = enabled && button.onPressed != null
-        ? ((button.style ?? context.button2style).color)
+        ? (button.style?.color ?? button.color ?? context.button2style.color)
         : context.b3;
     var text = Text(
       button.label,

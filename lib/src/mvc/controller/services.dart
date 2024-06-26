@@ -1,5 +1,6 @@
-export 'services/firebase/authentication_service.dart';
+export 'services/firebase/firebase_authentication_service.dart';
 export 'services/marvel_api/http_request.dart';
 export 'services/user_session_service.dart';
-export 'services/firestore_service.dart';
-export 'services/marvel_api/marvel_api.dart';
+export 'services/firebase/firestore_service.dart';
+export 'services/marvel_api/api_marvel.dart';
+export 'services/marvel_api/api_characters_service.dart';

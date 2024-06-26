@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../model/list_models.dart';
+import '../../../model/list_models.dart';
 
 abstract class FirestoreService<T> {
   DocumentReference get docReference;

@@ -188,7 +188,8 @@ class _RegisterState extends State<Register> {
       return;
     }
     await Dialogs.of(context).runAsyncAction(
-      future: () => AuthenticationService.createUserWithEmailAndPassword(
+      future: () =>
+          FirebaseAuthenticationService.createUserWithEmailAndPassword(
         userSession: widget.userSession,
         email: email!,
         password: password!,

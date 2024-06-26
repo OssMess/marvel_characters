@@ -40,12 +40,11 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
       builder: (context, userSession, _) {
         if (userSession.isAwaiting) {
           return SplashScreen(
+            userSession: userSession,
             exception: userSession.error,
           );
         }
-        if (userSession.isUnauthenticated ||
-            (userSession.isAuthenticated &&
-                userSession.emailVerified == false)) {
+        if (userSession.isUnauthenticated) {
           return AuthenticationRouter(
             userSession: userSession,
             settingsController: widget.settingsController,
