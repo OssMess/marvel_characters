@@ -2,8 +2,10 @@
 
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_skeleton/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -14,7 +16,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'src/app.dart';
-import 'src/mvc/controller/hives.dart';
+import 'src/mvc/model/enums.dart';
 import 'src/mvc/model/models.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
@@ -48,39 +50,37 @@ void main() async {
   ]);
   //APIs
   await Hive.initFlutter();
-  UserAPISession userSession = UserAPISession.initAwaiting();
-  //Firebase
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
-  // await FirebaseAppCheck.instance.activate(
-  //   // webProvider: WebProvider,
-  //   // webRecaptchaSiteKey: 'recaptcha-v3-site-key',
-  //   androidProvider:
-  //       kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
-  //   appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
-  // );
-  // UserFirebaseSession userSession = UserFirebaseSession.init(AuthState.awaiting);
-  // userSession.listenAuthStateChanges();
-  // FirebaseMessaging.instance.requestPermission(
-  //   alert: true,
-  //   announcement: false,
-  //   badge: true,
-  //   carPlay: false,
-  //   criticalAlert: false,
-  //   provisional: false,
-  //   sound: true,
-  // );
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // await flutterLocalNotificationsPlugin
-  //     .resolvePlatformSpecificImplementation<
-  //         AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
-  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-  //   alert: true,
-  //   badge: true,
-  //   sound: true,
-  // );
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+    // webProvider: WebProvider,
+    // webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+    androidProvider:
+        kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+    appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
+  );
+  UserSession userSession = UserSession.init(AuthState.awaiting);
+  userSession.listenAuthStateChanges();
+  FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   runApp(
     MultiProvider(
       providers: [

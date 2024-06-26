@@ -4,11 +4,11 @@
 
 #Variables
 # Firebase release config
-androidPackageNameRelease='com.android.skeleton_release'
-iOSPackageNameRelease='com.ios.skeleton_release'
+androidPackageNameRelease='com.optasoft.marvelcharacters'
+iOSPackageNameRelease='com.optasoft.marvelcharacters'
 reservedClientIdRelease='REVERSED_CLIENT_ID_RELEASE'
 clientIdRelease='CLIENT_ID_RELEASE'
-projectNameRelease='firebase-project-name-release'
+projectNameRelease='optasoft-chat-app'
 
 # Firebase Dev config
 androidPackageNameDev='com.android.skeleton_dev'
@@ -16,7 +16,6 @@ iOSPackageNameDev='com.ios.skeleton_dev'
 reservedClientIdDev='REVERSED_CLIENT_ID_DEV'
 clientIdDev='CLIENT_ID_DEV'
 projectNameDev='firebase-project-name-dev'
-
 
 # Delete old firebase config
 rm lib/firebase_options.dart

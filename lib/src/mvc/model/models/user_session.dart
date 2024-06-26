@@ -7,7 +7,7 @@ import '../../../tools.dart';
 import '../../controller/services.dart';
 import '../enums.dart';
 
-class UserFirebaseSession with ChangeNotifier {
+class UserSession with ChangeNotifier {
   /// user authentication sate
   AuthState authState;
   Exception? error;
@@ -23,7 +23,7 @@ class UserFirebaseSession with ChangeNotifier {
   DateTime? updatedAt;
   DateTime? createdAt;
 
-  UserFirebaseSession({
+  UserSession({
     required this.authState,
     required this.error,
     required this.uid,
@@ -39,7 +39,7 @@ class UserFirebaseSession with ChangeNotifier {
 
   ///Use as build an inital instance of `UserSession` while waiting for response from
   ///stream `AuthenticationService.userStream`
-  factory UserFirebaseSession.init(AuthState authState) => UserFirebaseSession(
+  factory UserSession.init(AuthState authState) => UserSession(
         authState: authState,
         error: null,
         uid: '',
@@ -54,7 +54,7 @@ class UserFirebaseSession with ChangeNotifier {
       );
 
   ///Call and use to catch [error] when listening to stream `AuthenticationService.userStream`
-  factory UserFirebaseSession.error(dynamic error) => UserFirebaseSession(
+  factory UserSession.error(dynamic error) => UserSession(
         authState: AuthState.awaiting,
         error: error,
         uid: '',
@@ -70,11 +70,11 @@ class UserFirebaseSession with ChangeNotifier {
 
   ///Call after user signup to build a instance of user `profile`, that will be
   ///pushed later by calling `toInitMap` method.
-  factory UserFirebaseSession.fromUserCredential(
+  factory UserSession.fromUserCredential(
     UserCredential userCredential,
     String? token,
   ) =>
-      UserFirebaseSession(
+      UserSession(
         authState: AuthState.authenticated,
         error: null,
         uid: userCredential.user!.uid,
@@ -91,11 +91,11 @@ class UserFirebaseSession with ChangeNotifier {
       );
 
   ///Use to build an instance of `UserSession` from [user] and also using [token].
-  factory UserFirebaseSession.fromUser(
+  factory UserSession.fromUser(
     User user,
     String? token,
   ) =>
-      UserFirebaseSession(
+      UserSession(
         authState: AuthState.authenticated,
         error: null,
         uid: user.uid,
@@ -112,12 +112,12 @@ class UserFirebaseSession with ChangeNotifier {
       );
 
   ///Use to build an instance of `UserSession` from [user] and [doc]
-  factory UserFirebaseSession.fromFirebaseUserDoc({
+  factory UserSession.fromFirebaseUserDoc({
     required User user,
     required DocumentSnapshot<Map<String, dynamic>> doc,
   }) {
     Map<String, dynamic> json = doc.data()!;
-    return UserFirebaseSession(
+    return UserSession(
       authState: AuthState.authenticated,
       error: null,
       uid: user.uid,
@@ -160,7 +160,7 @@ class UserFirebaseSession with ChangeNotifier {
     notifyListeners();
   }
 
-  void copyFromUserSession(UserFirebaseSession update) {
+  void copyFromUserSession(UserSession update) {
     authState = update.authState;
     error = update.error;
     uid = update.uid;
@@ -180,11 +180,11 @@ class UserFirebaseSession with ChangeNotifier {
       (user) async {
         if (user == null) {
           copyFromUserSession(
-            UserFirebaseSession.init(AuthState.unauthenticated),
+            UserSession.init(AuthState.unauthenticated),
           );
         } else {
           try {
-            UserFirebaseSession userdata =
+            UserSession userdata =
                 await AuthenticationService.userFromFirebaseUser(user);
             copyFromUserSession(userdata);
           } on Exception catch (e) {

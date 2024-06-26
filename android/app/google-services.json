@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "130443272698",
+    "project_id": "optasoft-chat-app",
+    "storage_bucket": "optasoft-chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130443272698:android:6329a3ea9349984611c443",
+        "android_client_info": {
+          "package_name": "com.optasoft.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6chD30Wf-rDiRgOJMqI_kwSpEkbokfrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130443272698:android:bafdff1393e2c02c11c443",
+        "android_client_info": {
+          "package_name": "com.optasoft.marvelcharacters"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6chD30Wf-rDiRgOJMqI_kwSpEkbokfrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

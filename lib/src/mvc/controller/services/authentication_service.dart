@@ -15,12 +15,12 @@ class AuthenticationService {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
   ///build a UserFirebaseSession object for current [user]
-  static Future<UserFirebaseSession> userFromFirebaseUser(
+  static Future<UserSession> userFromFirebaseUser(
     User user, [
     int retry = 5,
   ]) async {
     try {
-      late UserFirebaseSession userdata;
+      late UserSession userdata;
       if (retry <= 0) {
         throw FirebaseAuthException(
           code: 'time-out',
@@ -29,7 +29,7 @@ class AuthenticationService {
         );
       }
       userdata = await _firestore
-          .doc(FirestorePath.userFirebaseSession(uid: user.uid))
+          .doc(FirestorePath.userSession(uid: user.uid))
           .get(const GetOptions(source: Source.server))
           .then((doc) async {
         if (doc.data() == null || !doc.exists) {
@@ -59,7 +59,7 @@ class AuthenticationService {
         if (doc.data()!['uid'] != user.uid) {
           throw FirebaseAuthException(code: 'user-not-match');
         }
-        return UserFirebaseSession.fromFirebaseUserDoc(
+        return UserSession.fromFirebaseUserDoc(
           user: user,
           doc: doc,
         );
@@ -104,7 +104,7 @@ class AuthenticationService {
   /// retrieved from Firestore database.
   static Future<void> onSignInWithCredential({
     required UserCredential userCredential,
-    required UserFirebaseSession userSession,
+    required UserSession userSession,
   }) async {
     if (userCredential.user == null) throw Exception('User is not signed in');
     await onSignInUser(
@@ -121,19 +121,18 @@ class AuthenticationService {
   /// retrieved from Firestore database.
   static Future<void> onSignInUser({
     required User user,
-    required UserFirebaseSession userSession,
+    required UserSession userSession,
   }) async {
-    userSession
-        .copyFromUserSession(UserFirebaseSession.init(AuthState.awaiting));
+    userSession.copyFromUserSession(UserSession.init(AuthState.awaiting));
     String? token = await _messaging.getToken();
     try {
-      await UserFirebaseSessionService.updateToken(
+      await UserSessionService.updateToken(
         user.uid,
         token,
       );
     } catch (e) {
-      await UserFirebaseSessionService.create(
-        UserFirebaseSession.fromUser(
+      await UserSessionService.create(
+        UserSession.fromUser(
           user,
           token,
         ),
@@ -148,7 +147,7 @@ class AuthenticationService {
 
   /// Tries to create a new user account with the given [email] address and [password].
   static Future<void> createUserWithEmailAndPassword({
-    required UserFirebaseSession userSession,
+    required UserSession userSession,
     required String email,
     required String password,
   }) async {
@@ -167,7 +166,7 @@ class AuthenticationService {
 
   /// Attempts to sign in a user with the given [email] address and [password].
   static Future<void> signInWithEmailAndPassword({
-    required UserFirebaseSession userSession,
+    required UserSession userSession,
     required String email,
     required String password,
   }) async {
@@ -192,7 +191,7 @@ class AuthenticationService {
   }
 
   ///Signs out the current user.
-  static Future<void> signOut(UserFirebaseSession user) async {
+  static Future<void> signOut(UserSession user) async {
     await FirebaseFirestore.instance.terminate();
     await FirebaseFirestore.instance.clearPersistence();
     await _auth.signOut();

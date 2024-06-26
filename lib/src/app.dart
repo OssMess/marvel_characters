@@ -8,7 +8,6 @@ import 'mvc/controller/auth_wrapper.dart';
 import 'settings/settings_controller.dart';
 import 'tools/styles.dart';
 
-bool showSplashScreen = true;
 const Color primary = Color(0xFF29734B);
 const Color secondary = Color(0xFFffb33e);
 
@@ -19,10 +18,6 @@ class MyApp extends StatelessWidget {
   });
 
   final SettingsController settingsController;
-
-  void hideSplashScreen() {
-    showSplashScreen = false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +46,6 @@ class MyApp extends StatelessWidget {
               themeMode: settingsController.themeMode,
               locale: settingsController.localeMode,
               home: AuthWrapper(
-                showSplashScreen: showSplashScreen,
-                hideSplashScreen: hideSplashScreen,
                 settingsController: settingsController,
               ),
             );

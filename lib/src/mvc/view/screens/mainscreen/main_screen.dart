@@ -9,7 +9,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../../../../../main.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
-import '../../../controller/services.dart';
 import '../../../model/change_notifiers.dart';
 import '../../../model/models.dart';
 
@@ -20,7 +19,7 @@ class MainScreen extends StatefulWidget {
     required this.settingsController,
   });
 
-  final UserFirebaseSession user;
+  final UserSession user;
   final SettingsController settingsController;
 
   @override
@@ -36,12 +35,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
-    streamNotifications = AppNotificationsService.listenNotifications(
-      widget.user.uid,
-    );
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await initMessagesNotifier();
-    });
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? message) {
@@ -109,16 +102,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Future<void> initMessagesNotifier({bool refresh = false}) async {
-    if ((notifierMessages.value < 0) || (refresh)) {
-      notifierMessages.setValue(
-        await ChatsService.hasUnreadMessages(
-          widget.user.uid,
-        ),
-      );
-    }
-  }
-
   Future<void> onBackgroundMessage(RemoteMessage message) async {
     log('onBackgroundMessage->${message.data}');
   }
@@ -127,9 +110,6 @@ class _MainScreenState extends State<MainScreen> {
   void onMessage(RemoteMessage message) {
     log('onMessage->${message.data}');
     switch (message.data['key']) {
-      case 'new_message':
-        initMessagesNotifier(refresh: true);
-        break;
       default:
     }
   }

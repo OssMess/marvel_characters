@@ -1,4 +1,4 @@
-package com.optasoft.flutter_skeleton
+package com.optasoft.marvercharacters
 
 import io.flutter.embedding.android.FlutterActivity
 

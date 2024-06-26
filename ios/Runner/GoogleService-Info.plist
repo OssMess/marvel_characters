@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyB1-uENY6o5dVv4H12S0Unb8nLXv7OCCnw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>130443272698</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.optasoft.marvelcharacters</string>
+	<key>PROJECT_ID</key>
+	<string>optasoft-chat-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>optasoft-chat-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:130443272698:ios:7f3d43b6ea718c4a11c443</string>
+</dict>
+</plist>
