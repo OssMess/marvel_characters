@@ -1,9 +1,20 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 /// List user upcoming appointments (Set<`Appointment`>):
 abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   /// Set of unique `T`.
   Set<T> list = {};
+
+  // The limit of elements per page. Used for pagination.
+  final int limit;
+
+  // The total number of characters
+  int total = 0;
+
+  // Cuurent offset for pagination.
+  int offset = 0;
 
   /// is in init state and requires initialization.
   bool isNull = true;
@@ -19,6 +30,8 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
 
   /// current page.
   int currentPage = 0;
+
+  SetApiPaginationClasses({required this.limit});
 
   /// `true` if there are still more pages (pagination).
   bool get hasMore => currentPage < totalPages;
@@ -58,7 +71,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   Future<void> get({
     required int page,
     required bool refresh,
-    required void Function(Set<T>, int, int, bool, bool) update,
+    required void Function(Set<T>, int, bool, bool) update,
   });
 
   /// Get more data, uses pagination.
@@ -90,17 +103,23 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   /// Update list with query result, and notify listeners
   void update(
     Set<T> result,
-    int totalPages,
-    int currentPage,
+    int total,
     bool error,
     bool refresh,
   ) {
     if (error || refresh) {
       list.clear();
+      total = 0;
+      offset = 0;
+      totalPages = -1;
+      currentPage = 0;
+    } else {
+      list.addAll(result);
+      this.total = total;
+      offset = offset + min(limit, result.length);
+      totalPages = (total / limit).round() + 1;
+      currentPage++;
     }
-    list.addAll(result);
-    this.totalPages = totalPages;
-    this.currentPage = currentPage;
     isLoading = false;
     isNull = false;
     hasError = error;

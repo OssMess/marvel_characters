@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../../extensions.dart';
-import '../../model/list_models.dart';
-import '../model_widgets.dart';
+import '../../../../extensions.dart';
+import '../../../model/list_models.dart';
+import '../../model_widgets.dart';
 
 class FirestoreSliverSetView<T> extends StatelessWidget {
   const FirestoreSliverSetView({

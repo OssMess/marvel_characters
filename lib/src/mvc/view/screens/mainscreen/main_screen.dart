@@ -10,6 +10,7 @@ import '../../../../../main.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
 import '../../../model/change_notifiers.dart';
+import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 
 class MainScreen extends StatefulWidget {
@@ -34,6 +35,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    ListCharacters(limit: 10).initData(callGet: true);
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -69,12 +71,6 @@ class _MainScreenState extends State<MainScreen> {
       },
     );
 
-    FirebaseMessaging.onMessage.listen(
-      onMessage,
-      onDone: () {
-        log('onMessage->onDone');
-      },
-    );
     FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       onOpenMessage(

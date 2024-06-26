@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../extensions.dart';
-import '../../model/enums.dart';
+import '../../../../extensions.dart';
+import '../../../model/enums.dart';
 
 class CustomSecondaryButton extends StatelessWidget {
   const CustomSecondaryButton({

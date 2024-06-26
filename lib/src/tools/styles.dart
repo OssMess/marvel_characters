@@ -24,18 +24,18 @@ class Styles {
       );
 
   static const MaterialColor primary = MaterialColor(
-    0xFF10CD00,
+    0xFF29734B,
     <int, Color>{
-      50: Color(0xFFe7fae6),
-      100: Color(0xFFcff5cc),
-      200: Color(0xFFb7f0b3),
-      300: Color(0xFF9feb99),
-      400: Color(0xFF88e680),
-      500: Color(0xFF70e166),
-      600: Color(0xFF58dc4d),
-      700: Color(0xFF40d733),
-      800: Color(0xFF28d21a),
-      900: Color(0xFF10cd00),
+      50: Color(0xFFeaf1ed),
+      100: Color(0xFFd4e3db),
+      200: Color(0xFFbfd5c9),
+      300: Color(0xFFa9c7b7),
+      400: Color(0xFF94b9a5),
+      500: Color(0xFF7fab93),
+      600: Color(0xFF699d81),
+      700: Color(0xFF548f6f),
+      800: Color(0xFF3e815d),
+      900: Color(0xFF29734b),
     },
   );
 
