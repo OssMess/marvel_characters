@@ -38,7 +38,9 @@ class Character with ChangeNotifier {
     required this.listCharacterComics,
   });
 
-  factory Character.fromJson(Map<dynamic, dynamic> json) => Character(
+  factory Character.fromJson(
+          Map<dynamic, dynamic> json, List<Character> bookmarkedCharacters) =>
+      Character(
         id: json['id'],
         name: json['name'],
         description: json['description'],
@@ -53,7 +55,7 @@ class Character with ChangeNotifier {
         stories: Stories.fromJson(json['stories']),
         events: Comics.fromJson(json['events']),
         series: Comics.fromJson(json['series']),
-        isBookmarked: HiveCharacters.list
+        isBookmarked: bookmarkedCharacters
             .where((element) => element.id == json['id'])
             .isNotEmpty,
         listCharacterComics: ListCharacterComics(characterId: json['id']),
@@ -73,24 +75,24 @@ class Character with ChangeNotifier {
         'series': series.toJson(),
       };
 
-  Future<void> bookmark() async {
+  Future<void> bookmark(HiveCharacters hiveCharacters) async {
     if (isBookmarked) {
-      await deleteBookmark();
+      await deleteBookmark(hiveCharacters);
     } else {
-      await addBookmark();
+      await addBookmark(hiveCharacters);
     }
   }
 
-  Future<void> addBookmark() async {
+  Future<void> addBookmark(HiveCharacters hiveCharacters) async {
     isBookmarked = true;
     notifyListeners();
-    await HiveCharacters.save(this);
+    await hiveCharacters.save(this);
   }
 
-  Future<void> deleteBookmark() async {
+  Future<void> deleteBookmark(HiveCharacters hiveCharacters) async {
     isBookmarked = false;
     notifyListeners();
-    await HiveCharacters.delete(this);
+    await hiveCharacters.delete(this);
   }
 
   bool get hasWikiUrl =>

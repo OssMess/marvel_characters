@@ -11,9 +11,11 @@ import '../screens.dart';
 class CharacterTile extends StatelessWidget {
   const CharacterTile({
     super.key,
+    required this.userSession,
     required this.character,
   });
 
+  final UserSession userSession;
   final Character character;
 
   @override
@@ -21,6 +23,7 @@ class CharacterTile extends StatelessWidget {
     return InkResponse(
       onTap: () => context.push(
         widget: CharacterDetails(
+          userSession: userSession,
           character: character,
         ),
       ),

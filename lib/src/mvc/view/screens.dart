@@ -1,5 +1,6 @@
 export 'screens/mainscreen/main_screen.dart';
 export 'screens/mainscreen/character_details.dart';
+export 'screens/mainscreen/favorite_characters.dart';
 export 'screens/splash_screen.dart';
 export 'screens/authentication/authentication_page.dart';
 export 'screens/authentication/authentication_router.dart';

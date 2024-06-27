@@ -17,16 +17,17 @@ import '../../../model/enums.dart';
 import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 import '../../model_widgets.dart';
+import '../../screens.dart';
 import '../../tiles.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({
     super.key,
-    required this.user,
+    required this.userSession,
     required this.settingsController,
   });
 
-  final UserSession user;
+  final UserSession userSession;
   final SettingsController settingsController;
 
   @override
@@ -40,7 +41,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    listCharacters = ListCharacters(limit: 10);
+    listCharacters = ListCharacters(
+        hiveCharacters: widget.userSession.hiveCharacters!, limit: 10);
     listCharacters.initData(callGet: true);
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseMessaging.instance
@@ -97,6 +99,7 @@ class _MainScreenState extends State<MainScreen> {
           onRefresh: listCharacters.refresh,
           color: context.primary,
           backgroundColor: context.primaryColor.shade50,
+          displacement: context.viewPadding.top + 56,
           child: CustomScrollView(
             // physics: const ClampingScrollPhysics(),
             slivers: [
@@ -117,20 +120,41 @@ class _MainScreenState extends State<MainScreen> {
                         image: AssetImage('assets/images/mcu.jpg'),
                       ),
                     ),
-                    child: IconButton(
-                      onPressed: () => Dialogs.of(context).showAlertDialog(
-                        dialogState: DialogState.confirmation,
-                        subtitle: AppLocalizations.of(context)!.signout_hint,
-                        onContinue: () => Dialogs.of(context).runAsyncAction(
-                          future: widget.user.signOut,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () => context.push(
+                            widget: FavoriteCharacters(
+                              userSession: widget.userSession,
+                            ),
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          icon: Icon(
+                            AwesomeIconsSolid.heart,
+                            color: context.b1,
+                          ),
                         ),
-                        continueLabel: AppLocalizations.of(context)!.signout,
-                      ),
-                      visualDensity: VisualDensity.compact,
-                      icon: Icon(
-                        AwesomeIconsLight.arrow_right_from_bracket,
-                        color: context.b1,
-                      ),
+                        14.widthSp,
+                        IconButton(
+                          onPressed: () => Dialogs.of(context).showAlertDialog(
+                            dialogState: DialogState.confirmation,
+                            subtitle:
+                                AppLocalizations.of(context)!.signout_hint,
+                            onContinue: () =>
+                                Dialogs.of(context).runAsyncAction(
+                              future: widget.userSession.signOut,
+                            ),
+                            continueLabel:
+                                AppLocalizations.of(context)!.signout,
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          icon: Icon(
+                            AwesomeIconsLight.arrow_right_from_bracket,
+                            color: context.b1,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -156,6 +180,7 @@ class _MainScreenState extends State<MainScreen> {
                         itemBuilder: (context, index) {
                           if (index < listCharacters.length) {
                             return CharacterTile(
+                              userSession: widget.userSession,
                               character: listCharacters.elementAt(index),
                             );
                           }

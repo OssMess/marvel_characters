@@ -51,7 +51,6 @@ void main() async {
   ]);
   //APIs
   await Hive.initFlutter();
-  await HiveCharacters.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

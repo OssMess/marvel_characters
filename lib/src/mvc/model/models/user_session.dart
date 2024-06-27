@@ -18,6 +18,7 @@ class UserSession with ChangeNotifier {
   String? email;
   DateTime? updatedAt;
   DateTime? createdAt;
+  HiveCharacters? hiveCharacters;
 
   UserSession({
     required this.authState,
@@ -27,6 +28,7 @@ class UserSession with ChangeNotifier {
     required this.email,
     required this.updatedAt,
     required this.createdAt,
+    required this.hiveCharacters,
   });
 
   ///Use as build an inital instance of `UserSession` while waiting for response from
@@ -39,6 +41,7 @@ class UserSession with ChangeNotifier {
         email: null,
         updatedAt: null,
         createdAt: null,
+        hiveCharacters: null,
       );
 
   ///Call and use to catch [error] when listening to stream `AuthenticationService.userStream`
@@ -50,6 +53,7 @@ class UserSession with ChangeNotifier {
         email: null,
         updatedAt: null,
         createdAt: null,
+        hiveCharacters: null,
       );
 
   ///Call after user signup to build a instance of user `profile`, that will be
@@ -66,6 +70,7 @@ class UserSession with ChangeNotifier {
         email: userCredential.user!.email,
         updatedAt: DateTime.now(),
         createdAt: DateTime.now(),
+        hiveCharacters: HiveCharacters(),
       );
 
   ///Use to build an instance of `UserSession` from [user] and also using [token].
@@ -81,6 +86,7 @@ class UserSession with ChangeNotifier {
         email: user.email,
         updatedAt: DateTime.now(),
         createdAt: DateTime.now(),
+        hiveCharacters: HiveCharacters(),
       );
 
   ///Use to build an instance of `UserSession` from [user] and [doc]
@@ -97,6 +103,7 @@ class UserSession with ChangeNotifier {
       token: json['token'],
       createdAt: DateTimeUtils.getDateTimefromTimestamp(json['createdAt']),
       updatedAt: DateTimeUtils.getDateTimefromTimestamp(json['updatedAt']),
+      hiveCharacters: HiveCharacters(),
     );
   }
 
@@ -132,6 +139,7 @@ class UserSession with ChangeNotifier {
     email = update.email;
     updatedAt = update.updatedAt;
     createdAt = update.createdAt;
+    hiveCharacters = update.hiveCharacters;
     notifyListeners();
   }
 
@@ -147,6 +155,7 @@ class UserSession with ChangeNotifier {
             UserSession userdata =
                 await FirebaseAuthenticationService.userFromFirebaseUser(user);
             copyFromUserSession(userdata);
+            hiveCharacters?.init();
           } on Exception catch (e) {
             updateException(e);
           }
@@ -156,7 +165,7 @@ class UserSession with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await HiveCharacters.clear();
+    await hiveCharacters?.clear();
     await FirebaseAuthenticationService.signOut(this);
   }
 }

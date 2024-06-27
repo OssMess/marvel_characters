@@ -9,6 +9,7 @@ import '../../services.dart';
 
 class APICharactersService {
   Future<void> list({
+    required List<Character> bookmarkedCharacters,
     required ListCharacters listCharacters,
     required bool refresh,
   }) async {
@@ -26,7 +27,7 @@ class APICharactersService {
     if (response.statusCode == 200) {
       Map<dynamic, dynamic> result = jsonDecode(response.body);
       List<Character> list = List.from(result['data']['results'])
-          .map((e) => Character.fromJson(e))
+          .map((e) => Character.fromJson(e, bookmarkedCharacters))
           .toList();
       listCharacters.update(
         list.toSet(),

@@ -51,7 +51,7 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
           );
         }
         return MainScreen(
-          user: userSession,
+          userSession: userSession,
           settingsController: widget.settingsController,
         );
       },
