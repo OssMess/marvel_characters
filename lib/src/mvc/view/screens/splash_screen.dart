@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -48,7 +46,7 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 90.sp),
-              SpinKitCubeGrid(
+              const SpinKitCubeGrid(
                 color: Colors.red,
               ),
             ],

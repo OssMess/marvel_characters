@@ -1,4 +1,13 @@
 export 'models/user_session.dart';
 export 'models/character.dart';
+export 'models/comic.dart';
+export 'models/characters.dart';
+export 'models/characters_item.dart';
+export 'models/character_comic.dart';
+export 'models/series.dart';
+export 'models/url.dart';
+export 'models/stories.dart';
+export 'models/stories_item.dart';
+export 'models/thumbnail.dart';
 export 'models/firebase_model.dart';
 export 'models/backend_exception.dart';

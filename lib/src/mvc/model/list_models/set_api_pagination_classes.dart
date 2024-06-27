@@ -166,4 +166,16 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     getMore();
     return true;
   }
+
+  /// Add listener to [controller] to listen for pagination and load more results
+  /// if there are any.
+  void addControllerListener(ScrollController controller) {
+    controller.addListener(() {
+      if (isNull) return;
+      if (isLoading) return;
+      if (!canGetMore) return;
+      if (controller.position.maxScrollExtent != controller.offset) return;
+      getMore();
+    });
+  }
 }

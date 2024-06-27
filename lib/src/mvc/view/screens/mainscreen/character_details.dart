@@ -1,18 +1,37 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 import '../../../../tools.dart';
+import '../../tiles.dart';
 
-class CharacterDetails extends StatelessWidget {
+class CharacterDetails extends StatefulWidget {
   const CharacterDetails({
     super.key,
     required this.character,
   });
 
   final Character character;
+
+  @override
+  State<CharacterDetails> createState() => _CharacterDetailsState();
+}
+
+class _CharacterDetailsState extends State<CharacterDetails> {
+  ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    widget.character.listCharacterComics
+        .addControllerListener(scrollController);
+    widget.character.listCharacterComics.initData(callGet: true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +42,12 @@ class CharacterDetails extends StatelessWidget {
         backgroundColor: Colors.transparent,
         actions: [
           AnimatedBuilder(
-            animation: character,
+            animation: widget.character,
             builder: (context, _) {
               return IconButton(
-                onPressed: character.bookmark,
+                onPressed: widget.character.bookmark,
                 icon: Icon(
-                  character.isBookmarked
+                  widget.character.isBookmarked
                       ? AwesomeIconsSolid.heart
                       : AwesomeIconsRegular.heart,
                 ),
@@ -45,12 +64,12 @@ class CharacterDetails extends StatelessWidget {
               width: 1.sw,
               height: 1.sw,
               child: Hero(
-                tag: 'character${character.id}',
+                tag: 'character${widget.character.id}',
                 child: Stack(
                   children: [
                     Image(
                       fit: BoxFit.cover,
-                      image: character.photo,
+                      image: widget.character.photo,
                     ),
                     Positioned.fill(
                       child: DecoratedBox(
@@ -90,17 +109,17 @@ class CharacterDetails extends StatelessWidget {
                 children: [
                   //Title/Name
                   Text(
-                    character.name,
+                    widget.character.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: context.h2b1,
                   ),
                   Text(
-                    '#${character.id}',
+                    '#${widget.character.id}',
                     style: context.h4b2,
                   ),
                   //Description
-                  if (character.description.trim().isNotEmpty) ...[
+                  if (widget.character.description.trim().isNotEmpty) ...[
                     30.heightSp,
                     Text(
                       AppLocalizations.of(context)!.description,
@@ -109,12 +128,12 @@ class CharacterDetails extends StatelessWidget {
                       style: context.h2b1,
                     ),
                     Text(
-                      character.description,
+                      widget.character.description,
                       style: context.h4b2,
                     ),
                   ],
                   //Links
-                  if (character.urls.isNotEmpty) ...[
+                  if (widget.character.urls.isNotEmpty) ...[
                     16.heightSp,
                     Text(
                       AppLocalizations.of(context)!.links,
@@ -122,42 +141,75 @@ class CharacterDetails extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: context.h2b1,
                     ),
-                    if (character.hasDetailsUrl)
+                    if (widget.character.hasDetailsUrl)
                       ReadMoreLink(
                         title: AppLocalizations.of(context)!.read_more_detail,
-                        url: character.detailUrl,
+                        url: widget.character.detailUrl,
                       ),
-                    if (character.hasWikiUrl)
+                    if (widget.character.hasWikiUrl)
                       ReadMoreLink(
                         title: AppLocalizations.of(context)!.read_more_wiki,
-                        url: character.wikiUrl,
+                        url: widget.character.wikiUrl,
                       ),
-                    if (character.hasComicLinkUrl)
+                    if (widget.character.hasComicLinkUrl)
                       ReadMoreLink(
                         title:
                             AppLocalizations.of(context)!.read_more_comic_link,
-                        url: character.comiclinkUrl,
+                        url: widget.character.comiclinkUrl,
                       ),
                   ],
                   //Comics
-                  if (character.comics.items.isNotEmpty) ...[
+                  if (widget.character.comics.items.isNotEmpty) ...[
                     30.heightSp,
                     Text(
-                      '${AppLocalizations.of(context)!.comics} (${character.comics.items.length})',
+                      '${AppLocalizations.of(context)!.comics} (${widget.character.comics.items.length})',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: context.h2b1,
+                    ),
+                    UnconstrainedBox(
+                      child: SizedBox(
+                        height: 160.sp,
+                        width: 1.sw,
+                        child: ChangeNotifierProvider.value(
+                          value: widget.character.listCharacterComics,
+                          child: Consumer<ListCharacterComics>(
+                            builder: (context, listCharacterComics, _) {
+                              if (listCharacterComics.isNull &&
+                                  listCharacterComics.isLoading) {
+                                return Center(
+                                  child: SpinKitCubeGrid(
+                                    size: 30.sp,
+                                    color: Colors.red,
+                                  ),
+                                );
+                              }
+                              return ListView.separated(
+                                controller: scrollController,
+                                scrollDirection: Axis.horizontal,
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 24.sp),
+                                itemBuilder: (context, index) {
+                                  CharacterComic characterComic =
+                                      listCharacterComics.elementAt(index);
+                                  return CharacterComicTile(
+                                      characterComic: characterComic);
+                                },
+                                separatorBuilder: (_, __) => 10.widthSp,
+                                itemCount: listCharacterComics.length,
+                              );
+                            },
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ],
               ),
             ),
-            if (character.comics.items.isNotEmpty) ...[
-              SizedBox(
-                height: 160.sp,
-                width: 1.sw,
-              ),
-            ],
+            // if (widget.character.comics.items.isNotEmpty) ...[
+
+            // ],
           ],
         ),
       ),

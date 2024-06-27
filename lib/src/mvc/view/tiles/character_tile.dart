@@ -20,12 +20,13 @@ class CharacterTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () => context.push(
-          widget: CharacterDetails(
-        character: character,
-      )),
+        widget: CharacterDetails(
+          character: character,
+        ),
+      ),
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 82.sp,
             height: 82.sp,
             child: ClipRRect(

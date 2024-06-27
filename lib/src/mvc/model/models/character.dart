@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/hives.dart';
+import '../list_models.dart';
+import '../models.dart';
 
 class Character with ChangeNotifier {
   final int id;
@@ -17,6 +19,7 @@ class Character with ChangeNotifier {
   final Comics events;
   final Comics series;
   bool isBookmarked;
+  final ListCharacterComics listCharacterComics;
 
   Character({
     required this.id,
@@ -32,6 +35,7 @@ class Character with ChangeNotifier {
     required this.events,
     required this.series,
     required this.isBookmarked,
+    required this.listCharacterComics,
   });
 
   factory Character.fromJson(Map<dynamic, dynamic> json) => Character(
@@ -42,7 +46,8 @@ class Character with ChangeNotifier {
         resourceUri: json['resourceURI'],
         urls: List<Url>.from(json['urls'].map((x) => Url.fromJson(x))),
         photo: CachedNetworkImageProvider(
-            json['thumbnail']['path'] + '.' + json['thumbnail']['extension']),
+          json['thumbnail']['path'] + '.' + json['thumbnail']['extension'],
+        ),
         thumbnail: Thumbnail.fromJson(json['thumbnail']),
         comics: Comics.fromJson(json['comics']),
         stories: Stories.fromJson(json['stories']),
@@ -51,6 +56,7 @@ class Character with ChangeNotifier {
         isBookmarked: HiveCharacters.list
             .where((element) => element.id == json['id'])
             .isNotEmpty,
+        listCharacterComics: ListCharacterComics(characterId: json['id']),
       );
 
   Map<dynamic, dynamic> toJson() => {
@@ -152,98 +158,5 @@ class ComicsItem {
   Map<dynamic, dynamic> toJson() => {
         'resourceURI': resourceUri,
         'name': name,
-      };
-}
-
-class Stories {
-  final int available;
-  final int returned;
-  final String collectionUri;
-  final List<StoriesItem> items;
-
-  Stories({
-    required this.available,
-    required this.returned,
-    required this.collectionUri,
-    required this.items,
-  });
-
-  factory Stories.fromJson(Map<dynamic, dynamic> json) => Stories(
-        available: json['available'],
-        returned: json['returned'],
-        collectionUri: json['collectionURI'],
-        items: List<StoriesItem>.from(
-            json['items'].map((x) => StoriesItem.fromJson(x))),
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'available': available,
-        'returned': returned,
-        'collectionURI': collectionUri,
-        'items': List<dynamic>.from(items.map((x) => x.toJson())),
-      };
-}
-
-class StoriesItem {
-  final String resourceUri;
-  final String name;
-  final String type;
-
-  StoriesItem({
-    required this.resourceUri,
-    required this.name,
-    required this.type,
-  });
-
-  factory StoriesItem.fromJson(Map<dynamic, dynamic> json) => StoriesItem(
-        resourceUri: json['resourceURI'],
-        name: json['name'],
-        type: json['type'],
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'resourceURI': resourceUri,
-        'name': name,
-        'type': type,
-      };
-}
-
-class Thumbnail {
-  final String path;
-  final String extension;
-
-  Thumbnail({
-    required this.path,
-    required this.extension,
-  });
-
-  factory Thumbnail.fromJson(Map<dynamic, dynamic> json) => Thumbnail(
-        path: json['path'],
-        extension: json['extension'],
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'path': path,
-        'extension': extension,
-      };
-}
-
-class Url {
-  final String type;
-  final String url;
-
-  Url({
-    required this.type,
-    required this.url,
-  });
-
-  factory Url.fromJson(Map<dynamic, dynamic> json) => Url(
-        type: json['type'],
-        url: json['url'],
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'type': type,
-        'url': url,
       };
 }
