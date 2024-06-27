@@ -75,6 +75,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     if (isNull) return;
     if (isLoading) return;
     isLoading = true;
+    notifyListeners();
     await get(
       refresh: false,
     );
@@ -83,6 +84,8 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   /// Refresh data.
   Future<void> refresh() async {
     if (isLoading) return;
+    total = 0;
+    offset = 0;
     totalPages = -1;
     currentPage = 0;
     hasError = false;
@@ -101,16 +104,13 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   ) {
     if (error || refresh) {
       list.clear();
-      total = 0;
-      offset = 0;
-      totalPages = -1;
-      currentPage = 0;
-    } else {
-      list.addAll(result);
+    }
+    if (!error) {
       this.total = total;
       offset = offset + min(limit, result.length);
       totalPages = (total / limit).round() + 1;
       currentPage++;
+      list.addAll(result);
     }
     isLoading = false;
     isNull = false;

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../tools.dart';
+import '../../controller/hives.dart';
 import '../../controller/services.dart';
 import '../enums.dart';
 
@@ -155,6 +156,7 @@ class UserSession with ChangeNotifier {
   }
 
   Future<void> signOut() async {
+    await HiveCharacters.clear();
     await FirebaseAuthenticationService.signOut(this);
   }
 }

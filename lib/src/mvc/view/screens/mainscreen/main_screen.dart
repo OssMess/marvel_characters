@@ -6,6 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../main.dart';
 import '../../../../settings/settings_controller.dart';
@@ -13,6 +16,8 @@ import '../../../../tools.dart';
 import '../../../model/enums.dart';
 import '../../../model/list_models.dart';
 import '../../../model/models.dart';
+import '../../model_widgets.dart';
+import '../../tiles.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({
@@ -30,11 +35,13 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late ListCharacters listCharacters;
 
   @override
   void initState() {
     super.initState();
-    ListCharacters(limit: 10).initData(callGet: true);
+    listCharacters = ListCharacters(limit: 10);
+    listCharacters.initData(callGet: true);
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -82,25 +89,94 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => Dialogs.of(context).showAlertDialog(
-              dialogState: DialogState.confirmation,
-              subtitle: AppLocalizations.of(context)!.signout_hint,
-              onContinue: () => Dialogs.of(context).runAsyncAction(
-                future: widget.user.signOut,
+    return NotificationListener<ScrollNotification>(
+      onNotification: listCharacters.onMaxScrollExtent,
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: RefreshIndicator(
+          onRefresh: listCharacters.refresh,
+          color: context.primary,
+          backgroundColor: context.primaryColor.shade50,
+          child: CustomScrollView(
+            // physics: const ClampingScrollPhysics(),
+            slivers: [
+              //Header
+              SliverToBoxAdapter(
+                child: AspectRatio(
+                  aspectRatio: 1.77,
+                  child: Container(
+                    width: 1.sw,
+                    alignment: AlignmentDirectional.topEnd,
+                    padding: EdgeInsets.symmetric(horizontal: 8.sp).add(
+                      EdgeInsets.only(
+                        top: context.viewPadding.top,
+                      ),
+                    ),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/mcu.jpg'),
+                      ),
+                    ),
+                    child: IconButton(
+                      onPressed: () => Dialogs.of(context).showAlertDialog(
+                        dialogState: DialogState.confirmation,
+                        subtitle: AppLocalizations.of(context)!.signout_hint,
+                        onContinue: () => Dialogs.of(context).runAsyncAction(
+                          future: widget.user.signOut,
+                        ),
+                        continueLabel: AppLocalizations.of(context)!.signout,
+                      ),
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(
+                        AwesomeIconsLight.arrow_right_from_bracket,
+                        color: context.b1,
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              continueLabel: AppLocalizations.of(context)!.signout,
-            ),
-            visualDensity: VisualDensity.compact,
-            icon: const Icon(
-              AwesomeIconsLight.arrow_right_from_bracket,
-            ),
+              ChangeNotifierProvider.value(
+                value: listCharacters,
+                child: Consumer<ListCharacters>(
+                  builder: (context, listCharacters, _) {
+                    if (listCharacters.isNull && listCharacters.isLoading) {
+                      return SliverPadding(
+                        padding: EdgeInsets.only(top: 200.h),
+                        sliver: SliverToBoxAdapter(
+                          child: SpinKitCubeGrid(
+                            size: 35.sp,
+                            color: Colors.red,
+                          ),
+                        ),
+                      );
+                    }
+                    return SliverPadding(
+                      padding: EdgeInsets.all(24.sp),
+                      sliver: SliverList.separated(
+                        itemBuilder: (context, index) {
+                          if (index < listCharacters.length) {
+                            return CharacterTile(
+                              character: listCharacters.elementAt(index),
+                            );
+                          }
+                          return CustomTrailingTile(
+                            hasMore: listCharacters.hasMore,
+                            isLoading: listCharacters.isLoading,
+                            isNotNull: listCharacters.isNotNull,
+                            isSliver: false,
+                          );
+                        },
+                        separatorBuilder: (_, __) => 30.height,
+                        itemCount: listCharacters.length +
+                            (listCharacters.hasMore ? 1 : 0),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

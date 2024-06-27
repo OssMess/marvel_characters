@@ -1,15 +1,22 @@
-class Character {
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+
+import '../../controller/hives.dart';
+
+class Character with ChangeNotifier {
   final int id;
   final String name;
   final String description;
   final String modified;
   final String resourceUri;
   final List<Url> urls;
+  final CachedNetworkImageProvider photo;
   final Thumbnail thumbnail;
   final Comics comics;
   final Stories stories;
   final Comics events;
   final Comics series;
+  bool isBookmarked;
 
   Character({
     required this.id,
@@ -18,28 +25,35 @@ class Character {
     required this.modified,
     required this.resourceUri,
     required this.urls,
+    required this.photo,
     required this.thumbnail,
     required this.comics,
     required this.stories,
     required this.events,
     required this.series,
+    required this.isBookmarked,
   });
 
-  factory Character.fromJson(Map<String, dynamic> json) => Character(
+  factory Character.fromJson(Map<dynamic, dynamic> json) => Character(
         id: json['id'],
         name: json['name'],
         description: json['description'],
         modified: json['modified'],
         resourceUri: json['resourceURI'],
         urls: List<Url>.from(json['urls'].map((x) => Url.fromJson(x))),
+        photo: CachedNetworkImageProvider(
+            json['thumbnail']['path'] + '.' + json['thumbnail']['extension']),
         thumbnail: Thumbnail.fromJson(json['thumbnail']),
         comics: Comics.fromJson(json['comics']),
         stories: Stories.fromJson(json['stories']),
         events: Comics.fromJson(json['events']),
         series: Comics.fromJson(json['series']),
+        isBookmarked: HiveCharacters.list
+            .where((element) => element.id == json['id'])
+            .isNotEmpty,
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'id': id,
         'name': name,
         'description': description,
@@ -52,6 +66,44 @@ class Character {
         'events': events.toJson(),
         'series': series.toJson(),
       };
+
+  Future<void> bookmark() async {
+    if (isBookmarked) {
+      await deleteBookmark();
+    } else {
+      await addBookmark();
+    }
+  }
+
+  Future<void> addBookmark() async {
+    isBookmarked = true;
+    notifyListeners();
+    await HiveCharacters.save(this);
+  }
+
+  Future<void> deleteBookmark() async {
+    isBookmarked = false;
+    notifyListeners();
+    await HiveCharacters.delete(this);
+  }
+
+  bool get hasWikiUrl =>
+      urls.where((element) => element.type == 'wiki').isNotEmpty;
+
+  String get wikiUrl =>
+      urls.firstWhere((element) => element.type == 'wiki').url;
+
+  bool get hasDetailsUrl =>
+      urls.where((element) => element.type == 'detail').isNotEmpty;
+
+  String get detailUrl =>
+      urls.firstWhere((element) => element.type == 'detail').url;
+
+  bool get hasComicLinkUrl =>
+      urls.where((element) => element.type == 'comiclink').isNotEmpty;
+
+  String get comiclinkUrl =>
+      urls.firstWhere((element) => element.type == 'comiclink').url;
 }
 
 class Comics {
@@ -67,7 +119,7 @@ class Comics {
     required this.items,
   });
 
-  factory Comics.fromJson(Map<String, dynamic> json) => Comics(
+  factory Comics.fromJson(Map<dynamic, dynamic> json) => Comics(
         available: json['available'],
         returned: json['returned'],
         collectionUri: json['collectionURI'],
@@ -75,7 +127,7 @@ class Comics {
             json['items'].map((x) => ComicsItem.fromJson(x))),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'available': available,
         'returned': returned,
         'collectionURI': collectionUri,
@@ -92,12 +144,12 @@ class ComicsItem {
     required this.name,
   });
 
-  factory ComicsItem.fromJson(Map<String, dynamic> json) => ComicsItem(
+  factory ComicsItem.fromJson(Map<dynamic, dynamic> json) => ComicsItem(
         resourceUri: json['resourceURI'],
         name: json['name'],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'resourceURI': resourceUri,
         'name': name,
       };
@@ -116,7 +168,7 @@ class Stories {
     required this.items,
   });
 
-  factory Stories.fromJson(Map<String, dynamic> json) => Stories(
+  factory Stories.fromJson(Map<dynamic, dynamic> json) => Stories(
         available: json['available'],
         returned: json['returned'],
         collectionUri: json['collectionURI'],
@@ -124,7 +176,7 @@ class Stories {
             json['items'].map((x) => StoriesItem.fromJson(x))),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'available': available,
         'returned': returned,
         'collectionURI': collectionUri,
@@ -143,13 +195,13 @@ class StoriesItem {
     required this.type,
   });
 
-  factory StoriesItem.fromJson(Map<String, dynamic> json) => StoriesItem(
+  factory StoriesItem.fromJson(Map<dynamic, dynamic> json) => StoriesItem(
         resourceUri: json['resourceURI'],
         name: json['name'],
         type: json['type'],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'resourceURI': resourceUri,
         'name': name,
         'type': type,
@@ -165,12 +217,12 @@ class Thumbnail {
     required this.extension,
   });
 
-  factory Thumbnail.fromJson(Map<String, dynamic> json) => Thumbnail(
+  factory Thumbnail.fromJson(Map<dynamic, dynamic> json) => Thumbnail(
         path: json['path'],
         extension: json['extension'],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'path': path,
         'extension': extension,
       };
@@ -185,12 +237,12 @@ class Url {
     required this.url,
   });
 
-  factory Url.fromJson(Map<String, dynamic> json) => Url(
+  factory Url.fromJson(Map<dynamic, dynamic> json) => Url(
         type: json['type'],
         url: json['url'],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         'type': type,
         'url': url,
       };

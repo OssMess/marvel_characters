@@ -22,6 +22,14 @@
     "you_recovered_your_password",
     "a_link_has_been_sent_to_your_email",
     "signout",
-    "signout_hint"
+    "signout_hint",
+    "events",
+    "comics",
+    "series",
+    "description",
+    "read_more_wiki",
+    "read_more_detail",
+    "read_more_comic_link",
+    "links"
   ]
 }

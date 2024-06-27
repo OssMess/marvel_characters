@@ -20,6 +20,7 @@ class CustomLoadingIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Card(
+          color: context.primaryColor.shade100,
           margin: margin ?? EdgeInsets.only(top: 50.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25.sp),
@@ -29,8 +30,7 @@ class CustomLoadingIndicator extends StatelessWidget {
             height: 41.sp,
             width: 41.sp,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: context.primary.withOpacity(0.05),
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
             child: SpinKitRing(

@@ -16,6 +16,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'firebase_options.dart';
 import 'src/app.dart';
+import 'src/mvc/controller/hives.dart';
 import 'src/mvc/model/enums.dart';
 import 'src/mvc/model/models.dart';
 import 'src/settings/settings_controller.dart';
@@ -50,6 +51,7 @@ void main() async {
   ]);
   //APIs
   await Hive.initFlutter();
+  await HiveCharacters.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

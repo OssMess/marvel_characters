@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
                   AppLocalizations.of(context)!.appTitle,
               theme: getLightTheme(),
               darkTheme: getDarkTheme(),
-              themeMode: settingsController.themeMode,
+              themeMode: ThemeMode.dark, //settingsController.themeMode,
               locale: settingsController.localeMode,
               home: AuthenticationWrapper(
                 settingsController: settingsController,
