@@ -7,7 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../mvc/model/enums.dart';
 import '../mvc/model/models_ui.dart';
 import '../mvc/view/dialogs.dart';
-import '../mvc/view/dialogs/slideshows.dart';
 import '../mvc/view/model_widgets.dart';
 import '../tools.dart';
 
@@ -295,105 +294,4 @@ class Dialogs {
       ),
     );
   }
-
-  /// Handle backend [exception] and show an adaptive dialog explaining the problem.
-  Future<void> handleBackendException({
-    required Exception exception,
-  }) async {
-    // await context.showAdaptiveModalBottomSheet(
-    //   builder: (_) => ConfirmationDialog(
-    //     dialogState: DialogState.error,
-    //     subtitle: exception is BookingHeroException
-    //         ? exception.message
-    //         : AppLocalizations.of(context)!.unknown_error,
-    //     continueLabel: AppLocalizations.of(context)!.ignore_close,
-    //     onContinue: null,
-    //   ),
-    // );
-  }
-
-  /// Shows a value picker dialog with
-  /// dialog [title],
-  /// [values] to pick one from,
-  /// [initialvalue] initial picked value,
-  /// [onPick] behavior
-  /// [hintText] search text field hint,
-  /// [searchable] if `true`, show a text field to search the values.
-  /// [searchStartsWith]
-  ///   - if `true`, search values and return those that start with the quesry test.
-  ///   - if `false`, search values and return those that contain quesry test.
-  Future<void> showSingleValuePickerDialog({
-    required String title,
-    required List<String> values,
-    required String? initialvalue,
-    String? hintText,
-    bool searchable = false,
-    bool searchStartsWith = false,
-    required void Function(String) onPick,
-  }) async {
-    await context.showAdaptiveModalBottomSheet(
-      builder: (context) => SingleValuePickerDialog(
-        title: title,
-        hintText: hintText,
-        values: values,
-        searchable: searchable,
-        searchStartsWith: searchStartsWith,
-        initialValue: initialvalue,
-        mainAxisSize: MainAxisSize.min,
-        physics: const ClampingScrollPhysics(),
-        onPick: onPick,
-      ),
-    );
-  }
-
-  Future<void> showExampleFormDialog({
-    required void Function(dynamic) onComplete,
-  }) async {
-    await context.showAdaptiveModalBottomSheet(
-      builder: (_) => ExampleFormDialog(
-        parentContext: context,
-        onComplete: onComplete,
-      ),
-    );
-  }
-
-  Future<void> showMenuDialog(List<ModelTextButton> items) async {
-    await context.showAdaptiveModalBottomSheet(
-      builder: (_) => MenuDialog(items: items),
-    );
-  }
-
-  Future<void> showMultiImageSlideshow({
-    required List<ImageProvider> photos,
-    required int initialPage,
-  }) =>
-      context.showAdaptiveModalBottomSheet(
-        isDismissible: true,
-        enableDrag: true,
-        backgroundColor: Colors.black,
-        builder: (context) => MultiImageSlideshow(
-          images: photos,
-          initialPage: initialPage,
-        ),
-      );
-
-  Future<void> showSingleImageSlideshow(ImageProvider photo) =>
-      context.showAdaptiveModalBottomSheet(
-        isDismissible: true,
-        enableDrag: true,
-        backgroundColor: Colors.black,
-        builder: (context) => SingleImageSlideshow(
-          image: photo,
-        ),
-      );
-
-  Future<void> showProfileImageSlideshow(ImageProvider photo) =>
-      context.showAdaptiveModalBottomSheet(
-        isDismissible: true,
-        enableDrag: true,
-        backgroundColor: Colors.black,
-        builder: (context) => ProfileImageSlideshow(
-          image: photo,
-        ),
-      );
 }
