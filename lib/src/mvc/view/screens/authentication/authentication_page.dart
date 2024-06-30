@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../model/models/user_session.dart';
+import '../../../../data/models/user_session.dart';
 import '../.././../../tools.dart';
 import '../../model_widgets.dart';
 

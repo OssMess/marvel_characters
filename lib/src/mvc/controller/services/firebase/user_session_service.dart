@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../model/firestore_path.dart';
-import '../../model/models.dart';
+import '../../../../data/models.dart';
+import '../../../model/firestore_path.dart';
 
 class UserSessionService {
   // static final FirebaseAuth _auth = FirebaseAuth.instance;

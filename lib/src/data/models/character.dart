@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../mvc/controller/hives.dart';
-import '../../mvc/model/list_models.dart';
+import '../list_models.dart';
 import '../models.dart';
 
 class Character with ChangeNotifier {

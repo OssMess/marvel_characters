@@ -1,6 +1,6 @@
+import '../../business_logic/cubits.dart';
 import '../../mvc/controller/hives.dart';
 import '../data_providers.dart';
-import '../list_models.dart';
 import '../models.dart';
 
 class CharacterRepository {
@@ -8,12 +8,12 @@ class CharacterRepository {
 
   Future<void> list({
     required List<Character> bookmarkedCharacters,
-    required ListCharacters listCharacters,
+    required ListCharactersCubit listCharacters,
     required bool refresh,
   }) async {
     Map<String, dynamic> result = await provider.list(
-      offset: listCharacters.offset,
-      limit: listCharacters.limit,
+      offset: listCharacters.state.offset,
+      limit: listCharacters.state.limit,
     );
     List<Character> list = List.from(result['data']['results'])
         .map((e) => Character.fromJson(e, bookmarkedCharacters))

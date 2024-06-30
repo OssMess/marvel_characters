@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../tools.dart';
-import '../../controller/hives.dart';
-import '../../controller/services.dart';
-import '../enums.dart';
+import '../../tools.dart';
+import '../../mvc/controller/hives.dart';
+import '../../mvc/controller/services.dart';
+import '../../mvc/model/enums.dart';
 
 class UserSession with ChangeNotifier {
   /// user authentication sate

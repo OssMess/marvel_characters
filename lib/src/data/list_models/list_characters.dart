@@ -1,25 +1,14 @@
-import '../models.dart';
+import '../list_models.dart';
 import '../../mvc/controller/hives.dart';
-import '../../mvc/model/list_models.dart';
+import '../models.dart';
 import '../repositories.dart';
 
-class ListCharacters extends SetApiPaginationClasses<Character> {
-  final HiveCharacters hiveCharacters;
+class ListCharacters extends ListModelsPagination<Character> {
+  /// The repository used to communicate with the backend.
   final CharacterRepository characterRepository = CharacterRepository();
 
-  ListCharacters({
-    super.limit = 10,
-    required this.hiveCharacters,
-  });
+  /// The hive used to bookmark characters
+  final HiveCharacters hiveCharacters;
 
-  @override
-  Future<void> get({
-    required bool refresh,
-  }) {
-    return characterRepository.list(
-      bookmarkedCharacters: hiveCharacters.list,
-      listCharacters: this,
-      refresh: refresh,
-    );
-  }
+  ListCharacters({super.limit, required this.hiveCharacters});
 }
