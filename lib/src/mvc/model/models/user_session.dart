@@ -33,7 +33,8 @@ class UserSession with ChangeNotifier {
 
   ///Use as build an inital instance of `UserSession` while waiting for response from
   ///stream `AuthenticationService.userStream`
-  factory UserSession.init(AuthState authState) => UserSession(
+  factory UserSession.init([AuthState authState = AuthState.awaiting]) =>
+      UserSession(
         authState: authState,
         error: null,
         uid: '',

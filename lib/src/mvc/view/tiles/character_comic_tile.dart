@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../data/models.dart';
 import '../../../tools.dart';
-import '../../model/models.dart';
 
 class CharacterComicTile extends StatelessWidget {
   const CharacterComicTile({

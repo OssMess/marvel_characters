@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../model/models.dart';
+import '../../../data/models.dart';
 
 class HiveCharacters with ChangeNotifier {
   late Box _box;

@@ -1,6 +1,6 @@
+import '../../../data/models.dart';
 import '../../controller/services.dart';
 import '../list_models.dart';
-import '../models.dart';
 
 class ListCharacterComics extends SetApiPaginationClasses<CharacterComic> {
   final int characterId;

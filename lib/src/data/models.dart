@@ -1,0 +1,10 @@
+export './models/character_comic.dart';
+export './models/character.dart';
+export './models/characters_item.dart';
+export './models/characters.dart';
+export './models/comic.dart';
+export './models/series.dart';
+export './models/stories_item.dart';
+export './models/stories.dart';
+export './models/thumbnail.dart';
+export './models/url.dart';

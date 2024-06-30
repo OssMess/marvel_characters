@@ -3,7 +3,8 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import '../../../model/list_models.dart';
+import '../../../../data/list_models.dart';
+import '../../../../data/models.dart';
 import '../../../model/models.dart';
 import '../../services.dart';
 

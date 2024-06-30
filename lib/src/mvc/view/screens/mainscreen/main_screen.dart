@@ -11,10 +11,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../main.dart';
+import '../../../../data/list_models.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
 import '../../../model/enums.dart';
-import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 import '../../model_widgets.dart';
 import '../../screens.dart';

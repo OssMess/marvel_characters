@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../data/models.dart';
 import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 import '../../../../tools.dart';
