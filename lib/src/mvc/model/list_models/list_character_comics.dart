@@ -11,10 +11,12 @@ class ListCharacterComics extends SetApiPaginationClasses<CharacterComic> {
 
   @override
   Future<void> get({required bool refresh}) {
-    return APIComicsService().listCharacterComics(
-      characterId: characterId,
-      listCharacterComics: this,
-      refresh: refresh,
-    );
+    return APIComicsService()
+        .listCharacterComics(
+          characterId: characterId,
+          listCharacterComics: this,
+          refresh: refresh,
+        )
+        .catchError((e) => super.updateError(e));
   }
 }

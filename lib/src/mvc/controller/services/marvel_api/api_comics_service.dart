@@ -31,7 +31,6 @@ class APIComicsService {
       listComics.update(
         list.toSet(),
         result['data']['total'],
-        false,
         refresh,
       );
     } else {
@@ -63,7 +62,6 @@ class APIComicsService {
       listCharacterComics.update(
         list.toSet(),
         result['data']['total'],
-        false,
         refresh,
       );
     } else {

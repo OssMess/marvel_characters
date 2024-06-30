@@ -14,10 +14,12 @@ class ListCharacters extends SetApiPaginationClasses<Character> {
   Future<void> get({
     required bool refresh,
   }) {
-    return APICharactersService().list(
-      bookmarkedCharacters: hiveCharacters.list,
-      listCharacters: this,
-      refresh: refresh,
-    );
+    return APICharactersService()
+        .list(
+          bookmarkedCharacters: hiveCharacters.list,
+          listCharacters: this,
+          refresh: refresh,
+        )
+        .catchError((e) => super.updateError(e));
   }
 }

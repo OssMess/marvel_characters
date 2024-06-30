@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../mvc/model/models.dart';
+
 class Functions {
   final BuildContext context;
 
@@ -19,6 +21,8 @@ class Functions {
       throw e;
     } on FirebaseException catch (e) {
       return translateExceptionKey(e.code);
+    } on BackendException catch (e) {
+      return e.code ?? 'AppLocalizations.of(context)!.unknown_error';
     } catch (e) {
       return AppLocalizations.of(context)!.unknown_error;
     }

@@ -8,3 +8,4 @@ export 'model_widgets/custom_radio_button.dart';
 export 'model_widgets/custom_text_form_field.dart';
 export 'model_widgets/list_view/custom_arrow_tile.dart';
 export 'model_widgets/list_view/custom_trailing_tile.dart';
+export 'model_widgets/custom_error_widget.dart';

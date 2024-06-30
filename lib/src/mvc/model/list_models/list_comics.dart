@@ -7,6 +7,8 @@ class ListComics extends SetApiPaginationClasses<Comic> {
 
   @override
   Future<void> get({required bool refresh}) {
-    return APIComicsService().list(listComics: this, refresh: refresh);
+    return APIComicsService()
+        .list(listComics: this, refresh: refresh)
+        .catchError((e) => super.updateError(e));
   }
 }

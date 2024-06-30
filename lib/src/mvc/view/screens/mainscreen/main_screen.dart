@@ -174,6 +174,16 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                       );
                     }
+                    if (listCharacters.hasError) {
+                      return SliverPadding(
+                        padding: EdgeInsets.only(top: 100.h),
+                        sliver: SliverToBoxAdapter(
+                          child: CustomErrorWidget(
+                            error: listCharacters.error!,
+                          ),
+                        ),
+                      );
+                    }
                     return SliverPadding(
                       padding: EdgeInsets.all(24.sp),
                       sliver: SliverList.separated(

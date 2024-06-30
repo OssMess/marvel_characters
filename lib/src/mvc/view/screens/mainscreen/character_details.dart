@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../model/list_models.dart';
 import '../../../model/models.dart';
 import '../../../../tools.dart';
+import '../../model_widgets.dart';
 import '../../tiles.dart';
 
 class CharacterDetails extends StatefulWidget {
@@ -185,6 +186,12 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                                     size: 30.sp,
                                     color: Colors.red,
                                   ),
+                                );
+                              }
+                              if (listCharacterComics.hasError) {
+                                return CustomErrorWidget(
+                                  error: listCharacterComics.error!,
+                                  offset: 0.7,
                                 );
                               }
                               return ListView.separated(

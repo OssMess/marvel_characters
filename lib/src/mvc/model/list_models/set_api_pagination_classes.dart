@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../models.dart';
+
 /// List user upcoming appointments (Set<`Appointment`>):
 abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   /// Set of unique `T`.
@@ -23,7 +25,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   bool isLoading = false;
 
   /// has error after the last HTTP request
-  bool hasError = false;
+  BackendException? error;
 
   /// total number of pages for appointments list.
   int totalPages = -1;
@@ -48,6 +50,8 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   bool get isNotEmpty => list.isNotEmpty;
 
   bool get canGetMore => (isNotNull && hasMore && !isLoading);
+
+  bool get hasError => error != null;
 
   T elementAt(int index) => list.elementAt(index);
 
@@ -88,7 +92,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     offset = 0;
     totalPages = -1;
     currentPage = 0;
-    hasError = false;
+    error = null;
     isLoading = true;
     await get(
       refresh: true,
@@ -99,22 +103,30 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   void update(
     Set<T> result,
     int total,
-    bool error,
     bool refresh,
   ) {
-    if (error || refresh) {
+    if (refresh) {
       list.clear();
     }
-    if (!error) {
-      this.total = total;
-      offset = offset + min(limit, result.length);
-      totalPages = (total / limit).round() + 1;
-      currentPage++;
-      list.addAll(result);
-    }
+    this.total = total;
+    offset = offset + min(limit, result.length);
+    totalPages = (total / limit).round() + 1;
+    currentPage++;
+    list.addAll(result);
     isLoading = false;
     isNull = false;
-    hasError = error;
+    error = null;
+    notifyListeners();
+  }
+
+  void updateError(BackendException error) {
+    this.error = error;
+    list.clear();
+    offset = 0;
+    currentPage = 0;
+    totalPages = -1;
+    isLoading = false;
+    isNull = false;
     notifyListeners();
   }
 
@@ -122,7 +134,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
   void reset() {
     isNull = true;
     isLoading = false;
-    hasError = false;
+    error = null;
     list.clear();
     totalPages = -1;
     currentPage = 0;
@@ -136,7 +148,7 @@ abstract class SetApiPaginationClasses<T> with ChangeNotifier {
     isLoading = update.isLoading;
     totalPages = update.totalPages;
     currentPage = update.currentPage;
-    hasError = update.hasError;
+    error = update.error;
     notifyListeners();
   }
 
