@@ -61,8 +61,6 @@ void main() async {
         kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
     appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
   );
-  UserSession userSession = UserSession.init(AuthState.awaiting);
-  userSession.listenAuthStateChanges();
   FirebaseMessaging.instance.requestPermission(
     alert: true,
     announcement: false,
@@ -82,16 +80,10 @@ void main() async {
     badge: true,
     sound: true,
   );
+  await Hive.initFlutter();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(
-          value: userSession,
-        ),
-      ],
-      child: MyApp(
-        settingsController: settingsController,
-      ),
+    MyApp(
+      settingsController: settingsController,
     ),
   );
 }

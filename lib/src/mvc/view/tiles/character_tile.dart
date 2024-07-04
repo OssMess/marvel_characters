@@ -1,9 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import '../../../business_logic/cubits.dart';
 import '../../../data/models.dart';
 import '../../../tools.dart';
 import '../screens.dart';
@@ -11,20 +13,20 @@ import '../screens.dart';
 class CharacterTile extends StatelessWidget {
   const CharacterTile({
     super.key,
-    required this.userSession,
     required this.character,
   });
 
-  final UserSession userSession;
   final Character character;
 
   @override
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () => context.push(
-        widget: CharacterDetails(
-          userSession: userSession,
-          character: character,
+        widget: BlocProvider.value(
+          value: BlocProvider.of<UserCubit>(context),
+          child: CharacterDetails(
+            character: character,
+          ),
         ),
       ),
       child: Row(

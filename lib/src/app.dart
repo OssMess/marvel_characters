@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'business_logic/cubits.dart';
 import 'mvc/controller/authentication_wrapper.dart';
 import 'settings/settings_controller.dart';
 import 'tools/styles.dart';
@@ -21,37 +23,40 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(428, 926),
-      builder: (context, widget) {
-        return AnimatedBuilder(
-          animation: settingsController,
-          builder: (BuildContext context, Widget? child) {
-            return MaterialApp(
-              restorationScopeId: 'app',
-              debugShowCheckedModeBanner: false,
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale('en', ''), // English, no country code
-              ],
-              onGenerateTitle: (BuildContext context) =>
-                  AppLocalizations.of(context)!.appTitle,
-              theme: getLightTheme(),
-              darkTheme: getDarkTheme(),
-              themeMode: ThemeMode.dark, //settingsController.themeMode,
-              locale: settingsController.localeMode,
-              home: AuthenticationWrapper(
-                settingsController: settingsController,
-              ),
-            );
-          },
-        );
-      },
+    return BlocProvider(
+      create: (context) => UserCubit()..listenAuthStateChanges(),
+      child: ScreenUtilInit(
+        designSize: const Size(428, 926),
+        builder: (context, widget) {
+          return AnimatedBuilder(
+            animation: settingsController,
+            builder: (BuildContext context, Widget? child) {
+              return MaterialApp(
+                restorationScopeId: 'app',
+                debugShowCheckedModeBanner: false,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: const [
+                  Locale('en', ''), // English, no country code
+                ],
+                onGenerateTitle: (BuildContext context) =>
+                    AppLocalizations.of(context)!.appTitle,
+                theme: getLightTheme(),
+                darkTheme: getDarkTheme(),
+                themeMode: ThemeMode.dark, //settingsController.themeMode,
+                locale: settingsController.localeMode,
+                home: AuthenticationWrapper(
+                  settingsController: settingsController,
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 

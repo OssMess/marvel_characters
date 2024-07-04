@@ -16,7 +16,6 @@ import '../../../../data/list_models.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
 import '../../../../data/enums.dart';
-import '../../../controller/hives.dart';
 import '../../model_widgets.dart';
 import '../../screens.dart';
 import '../../tiles.dart';
@@ -121,11 +120,9 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         IconButton(
                           onPressed: () => context.push(
-                            widget: FavoriteCharacters(
-                              userSession:
-                                  BlocProvider.of<UserSessionCubit>(context)
-                                      .state
-                                      .userSession,
+                            widget: BlocProvider.value(
+                              value: BlocProvider.of<UserCubit>(context),
+                              child: const FavoriteCharacters(),
                             ),
                           ),
                           visualDensity: VisualDensity.compact,
@@ -142,8 +139,8 @@ class _MainScreenState extends State<MainScreen> {
                                 AppLocalizations.of(context)!.signout_hint,
                             onContinue: () =>
                                 Dialogs.of(context).runAsyncAction(
-                              future: BlocProvider.of<UserSessionCubit>(context)
-                                  .signOut,
+                              future:
+                                  BlocProvider.of<UserCubit>(context).signOut,
                             ),
                             continueLabel:
                                 AppLocalizations.of(context)!.signout,
@@ -178,10 +175,6 @@ class _MainScreenState extends State<MainScreen> {
                       itemBuilder: (context, index) {
                         if (index < listCharacters.length) {
                           return CharacterTile(
-                            userSession:
-                                BlocProvider.of<UserSessionCubit>(context)
-                                    .state
-                                    .userSession,
                             character: listCharacters.elementAt(index),
                           );
                         }

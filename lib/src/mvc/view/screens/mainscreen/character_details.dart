@@ -14,11 +14,9 @@ import '../../tiles.dart';
 class CharacterDetails extends StatefulWidget {
   const CharacterDetails({
     super.key,
-    required this.userSession,
     required this.character,
   });
 
-  final UserSession userSession;
   final Character character;
 
   @override
@@ -48,8 +46,10 @@ class _CharacterDetailsState extends State<CharacterDetails> {
             animation: widget.character,
             builder: (context, _) {
               return IconButton(
-                onPressed: () => widget.character
-                    .bookmark(widget.userSession.hiveCharacters!),
+                onPressed: () => widget.character.bookmark(
+                  (BlocProvider.of<UserCubit>(context).state as UserSession)
+                      .hiveCharacters,
+                ),
                 icon: Icon(
                   widget.character.isBookmarked
                       ? AwesomeIconsSolid.heart

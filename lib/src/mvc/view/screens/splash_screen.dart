@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:badges/badges.dart' as badge;
 
-import '../../../data/models.dart';
+import '../../../business_logic/cubits.dart';
 import '../../../tools.dart';
 import '../../../data/models_ui.dart';
 import '../model_widgets.dart';
@@ -14,11 +15,11 @@ import '../model_widgets.dart';
 class SplashScreen extends StatelessWidget {
   const SplashScreen({
     super.key,
-    this.userSession,
+    required this.canSignOut,
     this.exception,
   });
 
-  final UserSession? userSession;
+  final bool canSignOut;
   final Exception? exception;
 
   @override
@@ -93,11 +94,11 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(flex: 3),
-              if (userSession != null)
+              if (canSignOut)
                 CustomTextButton(
                   button: ModelTextButton(
                     label: AppLocalizations.of(context)!.logout,
-                    onPressed: userSession!.signOut,
+                    onPressed: BlocProvider.of<UserCubit>(context).signOut,
                     color: context.primaryColor,
                   ),
                 ),

@@ -1,9 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../business_logic/cubits.dart';
 import '../../../../tools.dart';
 import '../../../controller/services.dart';
 import '../../../../data/enums.dart';
@@ -189,6 +191,7 @@ class _RegisterState extends State<Register> {
         email: email!,
         password: password!,
       ),
+      onComplete: (_) => BlocProvider.of<UserCubit>(context).emitUserLoading(),
       onError: (e) {
         setState(() {
           emailError = Functions.of(context).translateException(e);

@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../models.dart';
+import '../../business_logic/cubits.dart';
 import 'firestore_path.dart';
 import '../../mvc/controller/services.dart';
 
@@ -24,7 +24,7 @@ class FirebaseAuthenticationRepository {
     int retry = 5,
   ]) async {
     try {
-      late UserSession userdata;
+      late UserSession userSession;
       if (retry <= 0) {
         throw FirebaseAuthException(
           code: 'time-out',
@@ -32,7 +32,7 @@ class FirebaseAuthenticationRepository {
               'Connection time out! Your user document is still being written',
         );
       }
-      userdata = await _firestore
+      userSession = await _firestore
           .doc(FirestorePath.userSession(uid: user.uid))
           .get(const GetOptions(source: Source.server))
           .then((doc) async {
@@ -68,7 +68,7 @@ class FirebaseAuthenticationRepository {
           doc: doc,
         );
       });
-      return userdata;
+      return userSession;
     } on FirebaseAuthException catch (e) {
       if (retry > 0 &&
           ['time-out-being-created', 'time-out-has-pending-writes']
@@ -118,12 +118,12 @@ class FirebaseAuthenticationRepository {
   static Future<void> onSignInUser(User user) async {
     String? token = await _messaging.getToken();
     try {
-      await UserSessionRepository.updateToken(
+      await UserRepository.updateToken(
         user.uid,
         token,
       );
     } catch (e) {
-      await UserSessionRepository.create(
+      await UserRepository.create(
         UserSession.fromUser(
           user: user,
           token: token,
@@ -175,7 +175,7 @@ class FirebaseAuthenticationRepository {
   }
 
   ///Signs out the current user.
-  static Future<void> signOut(UserSession user) async {
+  static Future<void> signOut() async {
     await FirebaseFirestore.instance.terminate();
     await FirebaseFirestore.instance.clearPersistence();
     await _auth.signOut();

@@ -1,8 +1,10 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../business_logic/cubits.dart';
 import '../../../../tools.dart';
 import '../../../controller/services.dart';
 import '../../../../data/enums.dart';
@@ -115,6 +117,7 @@ class _SigninState extends State<Signin> {
         email: email!,
         password: password!,
       ),
+      onComplete: (_) => BlocProvider.of<UserCubit>(context).emitUserLoading(),
       onError: (e) {
         try {
           throw e;
