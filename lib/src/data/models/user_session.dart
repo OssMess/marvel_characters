@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../tools.dart';
 import '../../mvc/controller/hives.dart';
 import '../../mvc/controller/services.dart';
-import '../../mvc/model/enums.dart';
+import '../enums.dart';
 
 class UserSession with ChangeNotifier {
   /// user authentication sate
@@ -33,8 +33,7 @@ class UserSession with ChangeNotifier {
 
   ///Use as build an inital instance of `UserSession` while waiting for response from
   ///stream `AuthenticationService.userStream`
-  factory UserSession.init([AuthState authState = AuthState.awaiting]) =>
-      UserSession(
+  factory UserSession.init(AuthState authState) => UserSession(
         authState: authState,
         error: null,
         uid: '',
@@ -59,10 +58,10 @@ class UserSession with ChangeNotifier {
 
   ///Call after user signup to build a instance of user `profile`, that will be
   ///pushed later by calling `toInitMap` method.
-  factory UserSession.fromUserCredential(
-    UserCredential userCredential,
-    String? token,
-  ) =>
+  factory UserSession.fromUserCredential({
+    required UserCredential userCredential,
+    required String? token,
+  }) =>
       UserSession(
         authState: AuthState.authenticated,
         error: null,
@@ -75,10 +74,10 @@ class UserSession with ChangeNotifier {
       );
 
   ///Use to build an instance of `UserSession` from [user] and also using [token].
-  factory UserSession.fromUser(
-    User user,
-    String? token,
-  ) =>
+  factory UserSession.fromUser({
+    required User user,
+    required String? token,
+  }) =>
       UserSession(
         authState: AuthState.authenticated,
         error: null,
@@ -154,7 +153,8 @@ class UserSession with ChangeNotifier {
         } else {
           try {
             UserSession userdata =
-                await FirebaseAuthenticationService.userFromFirebaseUser(user);
+                await FirebaseAuthenticationRepository.userFromFirebaseUser(
+                    user);
             copyFromUserSession(userdata);
             hiveCharacters?.init();
           } on Exception catch (e) {
@@ -167,6 +167,6 @@ class UserSession with ChangeNotifier {
 
   Future<void> signOut() async {
     await hiveCharacters?.clear();
-    await FirebaseAuthenticationService.signOut(this);
+    await FirebaseAuthenticationRepository.signOut(this);
   }
 }

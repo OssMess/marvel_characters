@@ -5,20 +5,20 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:badges/badges.dart' as badge;
 
+import '../../../data/models.dart';
 import '../../../tools.dart';
-import '../../model/models.dart';
-import '../../model/models_ui.dart';
+import '../../../data/models_ui.dart';
 import '../model_widgets.dart';
 
 /// Splash screen, it shows when the app is opened and is still preparing data
 class SplashScreen extends StatelessWidget {
   const SplashScreen({
     super.key,
-    required this.userSession,
+    this.userSession,
     this.exception,
   });
 
-  final UserSession userSession;
+  final UserSession? userSession;
   final Exception? exception;
 
   @override
@@ -93,11 +93,11 @@ class SplashScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(flex: 3),
-              if (userSession.isAuthenticated)
+              if (userSession != null)
                 CustomTextButton(
                   button: ModelTextButton(
                     label: AppLocalizations.of(context)!.logout,
-                    onPressed: userSession.signOut,
+                    onPressed: userSession!.signOut,
                     color: context.primaryColor,
                   ),
                 ),

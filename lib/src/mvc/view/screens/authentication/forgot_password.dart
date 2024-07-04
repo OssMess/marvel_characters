@@ -3,19 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../../../../tools.dart';
 import '../../../controller/services.dart';
-import '../../../model/enums.dart';
-import '../../../model/models.dart';
+import '../../../../data/enums.dart';
 import '../../model_widgets.dart';
 import '../../screens.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({
     super.key,
-    required this.userSession,
     required this.authRouteNotifier,
   });
 
-  final UserSession userSession;
   final ValueNotifier<AuthRoute> authRouteNotifier;
 
   @override
@@ -30,7 +27,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return AuthenticationPage(
-      userSession: widget.userSession,
       onPressedLeadingAppBar: null,
       title: AppLocalizations.of(context)!.reset_password,
       subtitle: AppLocalizations.of(context)!.reset_password_hint,
@@ -68,8 +64,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       });
     }
     await Dialogs.of(context).runAsyncAction(
-      future: () =>
-          FirebaseAuthenticationService.sendPasswordResetEmail(email: email!),
+      future: () => FirebaseAuthenticationRepository.sendPasswordResetEmail(
+          email: email!),
       onCompleteMessage:
           AppLocalizations.of(context)!.a_link_has_been_sent_to_your_email,
       dialogType: DialogType.snackbar,

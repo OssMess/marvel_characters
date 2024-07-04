@@ -1,3 +1,4 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:developer';
 
@@ -8,14 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../../main.dart';
+import '../../../../business_logic/cubits.dart';
 import '../../../../data/list_models.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
-import '../../../model/enums.dart';
-import '../../../model/models.dart';
+import '../../../../data/enums.dart';
+import '../../../controller/hives.dart';
 import '../../model_widgets.dart';
 import '../../screens.dart';
 import '../../tiles.dart';
@@ -23,11 +24,9 @@ import '../../tiles.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({
     super.key,
-    required this.userSession,
     required this.settingsController,
   });
 
-  final UserSession userSession;
   final SettingsController settingsController;
 
   @override
@@ -36,14 +35,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late ListCharacters listCharacters;
 
   @override
   void initState() {
     super.initState();
-    listCharacters = ListCharacters(
-        hiveCharacters: widget.userSession.hiveCharacters!, limit: 10);
-    listCharacters.initData(callGet: true);
     WidgetsFlutterBinding.ensureInitialized();
     FirebaseMessaging.instance
         .getInitialMessage()
@@ -92,11 +87,12 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
-      onNotification: listCharacters.onMaxScrollExtent,
+      onNotification:
+          BlocProvider.of<ListCharactersCubit>(context).onMaxScrollExtent,
       child: Scaffold(
         key: _scaffoldKey,
         body: RefreshIndicator(
-          onRefresh: listCharacters.refresh,
+          onRefresh: BlocProvider.of<ListCharactersCubit>(context).refresh,
           color: context.primary,
           backgroundColor: context.primaryColor.shade50,
           displacement: context.viewPadding.top + 56,
@@ -126,7 +122,10 @@ class _MainScreenState extends State<MainScreen> {
                         IconButton(
                           onPressed: () => context.push(
                             widget: FavoriteCharacters(
-                              userSession: widget.userSession,
+                              userSession:
+                                  BlocProvider.of<UserSessionCubit>(context)
+                                      .state
+                                      .userSession,
                             ),
                           ),
                           visualDensity: VisualDensity.compact,
@@ -143,7 +142,8 @@ class _MainScreenState extends State<MainScreen> {
                                 AppLocalizations.of(context)!.signout_hint,
                             onContinue: () =>
                                 Dialogs.of(context).runAsyncAction(
-                              future: widget.userSession.signOut,
+                              future: BlocProvider.of<UserSessionCubit>(context)
+                                  .signOut,
                             ),
                             continueLabel:
                                 AppLocalizations.of(context)!.signout,
@@ -159,45 +159,45 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
               ),
-              ChangeNotifierProvider.value(
-                value: listCharacters,
-                child: Consumer<ListCharacters>(
-                  builder: (context, listCharacters, _) {
-                    if (listCharacters.isNull && listCharacters.isLoading) {
-                      return SliverPadding(
-                        padding: EdgeInsets.only(top: 200.h),
-                        sliver: SliverToBoxAdapter(
-                          child: SpinKitCubeGrid(
-                            size: 35.sp,
-                            color: Colors.red,
-                          ),
-                        ),
-                      );
-                    }
+              BlocBuilder<ListCharactersCubit, ListCharacters>(
+                builder: (context, listCharacters) {
+                  if (listCharacters.isNull && listCharacters.isLoading) {
                     return SliverPadding(
-                      padding: EdgeInsets.all(24.sp),
-                      sliver: SliverList.separated(
-                        itemBuilder: (context, index) {
-                          if (index < listCharacters.length) {
-                            return CharacterTile(
-                              userSession: widget.userSession,
-                              character: listCharacters.elementAt(index),
-                            );
-                          }
-                          return CustomTrailingTile(
-                            hasMore: listCharacters.hasMore,
-                            isLoading: listCharacters.isLoading,
-                            isNotNull: listCharacters.isNotNull,
-                            isSliver: false,
-                          );
-                        },
-                        separatorBuilder: (_, __) => 30.height,
-                        itemCount: listCharacters.length +
-                            (listCharacters.hasMore ? 1 : 0),
+                      padding: EdgeInsets.only(top: 200.h),
+                      sliver: SliverToBoxAdapter(
+                        child: SpinKitCubeGrid(
+                          size: 35.sp,
+                          color: Colors.red,
+                        ),
                       ),
                     );
-                  },
-                ),
+                  }
+                  return SliverPadding(
+                    padding: EdgeInsets.all(24.sp),
+                    sliver: SliverList.separated(
+                      itemBuilder: (context, index) {
+                        if (index < listCharacters.length) {
+                          return CharacterTile(
+                            userSession:
+                                BlocProvider.of<UserSessionCubit>(context)
+                                    .state
+                                    .userSession,
+                            character: listCharacters.elementAt(index),
+                          );
+                        }
+                        return CustomTrailingTile(
+                          hasMore: listCharacters.hasMore,
+                          isLoading: listCharacters.isLoading,
+                          isNotNull: listCharacters.isNotNull,
+                          isSliver: false,
+                        );
+                      },
+                      separatorBuilder: (_, __) => 30.height,
+                      itemCount: listCharacters.length +
+                          (listCharacters.hasMore ? 1 : 0),
+                    ),
+                  );
+                },
               ),
             ],
           ),

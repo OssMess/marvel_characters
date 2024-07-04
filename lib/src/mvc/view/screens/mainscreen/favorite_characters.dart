@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../model/models.dart';
+import '../../../../data/models.dart';
 import '../../../../tools.dart';
 import '../../tiles.dart';
 

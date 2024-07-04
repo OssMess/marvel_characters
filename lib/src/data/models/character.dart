@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../business_logic/cubits.dart';
 import '../../mvc/controller/hives.dart';
-import '../list_models.dart';
 import '../models.dart';
 
 class Character with ChangeNotifier {
@@ -19,7 +19,7 @@ class Character with ChangeNotifier {
   final Comics events;
   final Comics series;
   bool isBookmarked;
-  final ListCharacterComics listCharacterComics;
+  final ListCharacterComicsCubit listCharacterComicsCubit;
 
   Character({
     required this.id,
@@ -35,7 +35,7 @@ class Character with ChangeNotifier {
     required this.events,
     required this.series,
     required this.isBookmarked,
-    required this.listCharacterComics,
+    required this.listCharacterComicsCubit,
   });
 
   factory Character.fromJson(
@@ -58,7 +58,7 @@ class Character with ChangeNotifier {
         isBookmarked: bookmarkedCharacters
             .where((element) => element.id == json['id'])
             .isNotEmpty,
-        listCharacterComics: ListCharacterComics(characterId: json['id']),
+        listCharacterComicsCubit: ListCharacterComicsCubit(json['id']),
       );
 
   Map<dynamic, dynamic> toJson() => {

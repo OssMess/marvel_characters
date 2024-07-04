@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../mvc/model/enums.dart';
-import '../mvc/model/models_ui.dart';
-import '../mvc/view/dialogs.dart';
+import '../data/enums.dart';
+import '../data/models_ui.dart';
+import '../presentation/dialogs.dart';
 import '../mvc/view/model_widgets.dart';
 import '../tools.dart';
 

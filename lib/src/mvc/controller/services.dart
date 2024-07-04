@@ -1,3 +1,2 @@
-export 'services/firebase/firebase_authentication_service.dart';
-export 'services/firebase/user_session_service.dart';
-export 'services/firebase/firestore_service.dart';
+export '../../data/data_providers/firebase_authentication_repository.dart';
+export '../../data/data_providers/user_session_repository.dart';

@@ -6,19 +6,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../tools.dart';
 import '../../../controller/services.dart';
-import '../../../model/enums.dart';
-import '../../../model/models.dart';
+import '../../../../data/enums.dart';
 import '../../model_widgets.dart';
 import '../../screens.dart';
 
 class Register extends StatefulWidget {
   const Register({
     super.key,
-    required this.userSession,
     required this.authRouteNotifier,
   });
 
-  final UserSession userSession;
   final ValueNotifier<AuthRoute> authRouteNotifier;
 
   @override
@@ -35,7 +32,6 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return AuthenticationPage(
-      userSession: widget.userSession,
       onPressedLeadingAppBar: null,
       title: AppLocalizations.of(context)!.register,
       subtitle: AppLocalizations.of(context)!.register_hint,
@@ -189,8 +185,7 @@ class _RegisterState extends State<Register> {
     }
     await Dialogs.of(context).runAsyncAction(
       future: () =>
-          FirebaseAuthenticationService.createUserWithEmailAndPassword(
-        userSession: widget.userSession,
+          FirebaseAuthenticationRepository.createUserWithEmailAndPassword(
         email: email!,
         password: password!,
       ),

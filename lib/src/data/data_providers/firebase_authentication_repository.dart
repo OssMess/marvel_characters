@@ -1,18 +1,22 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../../../model/enums.dart';
-import '../../../model/firestore_path.dart';
-import '../../../model/models.dart';
-import '../../services.dart';
+import '../models.dart';
+import 'firestore_path.dart';
+import '../../mvc/controller/services.dart';
 
-class FirebaseAuthenticationService {
+class FirebaseAuthenticationRepository {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+
+  Stream<User?> onChangeAuthState() {
+    return FirebaseAuth.instance.authStateChanges();
+  }
 
   ///build a UserFirebaseSession object for current [user]
   static Future<UserSession> userFromFirebaseUser(
@@ -102,36 +106,27 @@ class FirebaseAuthenticationService {
   /// On user signs in with credential, first update AuthState to `awaiting` to
   /// show the splash screen while user document is being created/updated, and
   /// retrieved from Firestore database.
-  static Future<void> onSignInWithCredential({
-    required UserCredential userCredential,
-    required UserSession userSession,
-  }) async {
+  static Future<void> onSignInWithCredential(
+      UserCredential userCredential) async {
     if (userCredential.user == null) throw Exception('User is not signed in');
-    await onSignInUser(
-      user: userCredential.user!,
-      userSession: userSession,
-    );
+    await onSignInUser(userCredential.user!);
   }
 
   /// On user signs in, first update AuthState to `awaiting` to
   /// show the splash screen while user document is being created/updated, and
   /// retrieved from Firestore database.
-  static Future<void> onSignInUser({
-    required User user,
-    required UserSession userSession,
-  }) async {
-    userSession.copyFromUserSession(UserSession.init(AuthState.awaiting));
+  static Future<void> onSignInUser(User user) async {
     String? token = await _messaging.getToken();
     try {
-      await UserSessionService.updateToken(
+      await UserSessionRepository.updateToken(
         user.uid,
         token,
       );
     } catch (e) {
-      await UserSessionService.create(
+      await UserSessionRepository.create(
         UserSession.fromUser(
-          user,
-          token,
+          user: user,
+          token: token,
         ),
       );
     }
@@ -144,7 +139,6 @@ class FirebaseAuthenticationService {
 
   /// Tries to create a new user account with the given [email] address and [password].
   static Future<void> createUserWithEmailAndPassword({
-    required UserSession userSession,
     required String email,
     required String password,
   }) async {
@@ -154,16 +148,12 @@ class FirebaseAuthenticationService {
       password: password,
     );
     if (userCredential.user != null) {
-      FirebaseAuthenticationService.onSignInWithCredential(
-        userCredential: userCredential,
-        userSession: userSession,
-      );
+      FirebaseAuthenticationRepository.onSignInWithCredential(userCredential);
     }
   }
 
   /// Attempts to sign in a user with the given [email] address and [password].
   static Future<void> signInWithEmailAndPassword({
-    required UserSession userSession,
     required String email,
     required String password,
   }) async {
@@ -173,10 +163,7 @@ class FirebaseAuthenticationService {
       password: password,
     );
     if (userCredential.user != null) {
-      FirebaseAuthenticationService.onSignInWithCredential(
-        userCredential: userCredential,
-        userSession: userSession,
-      );
+      FirebaseAuthenticationRepository.onSignInWithCredential(userCredential);
     }
   }
 

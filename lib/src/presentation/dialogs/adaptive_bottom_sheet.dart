@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../tools.dart';
-import '../../model/models_ui.dart';
-import '../model_widgets.dart';
+import '../../tools.dart';
+import '../../data/models_ui.dart';
+import '../../mvc/view/model_widgets.dart';
 
 /// shows an bottomsheet adaptive to its content, will take full screen
 /// or only part of the screen

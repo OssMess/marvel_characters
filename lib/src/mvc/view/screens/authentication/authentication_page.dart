@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../data/models/user_session.dart';
 import '../.././../../tools.dart';
 import '../../model_widgets.dart';
 
@@ -9,7 +8,6 @@ class AuthenticationPage extends StatelessWidget {
   const AuthenticationPage({
     super.key,
     this.onPressedLeadingAppBar,
-    required this.userSession,
     required this.title,
     required this.subtitle,
     required this.formKey,
@@ -21,7 +19,6 @@ class AuthenticationPage extends StatelessWidget {
     required this.recognizerTextSpan,
   });
 
-  final UserSession userSession;
   final void Function()? onPressedLeadingAppBar;
   final String title;
   final String subtitle;

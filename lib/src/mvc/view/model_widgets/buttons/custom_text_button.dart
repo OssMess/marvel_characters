@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../extensions.dart';
-import '../../../model/models_ui.dart';
+import '../../../../data/models_ui.dart';
 
 class CustomTextButton extends StatelessWidget {
   const CustomTextButton({

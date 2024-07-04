@@ -1,10 +1,11 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../business_logic/cubits.dart';
 import '../../../../data/list_models.dart';
 import '../../../../data/models.dart';
 import '../../../../tools.dart';
@@ -29,9 +30,9 @@ class _CharacterDetailsState extends State<CharacterDetails> {
 
   @override
   void initState() {
-    widget.character.listCharacterComics
+    widget.character.listCharacterComicsCubit
         .addControllerListener(scrollController);
-    widget.character.listCharacterComics.initData(callGet: true);
+    widget.character.listCharacterComicsCubit.initData(callGet: true);
     super.initState();
   }
 
@@ -174,10 +175,11 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                       child: SizedBox(
                         height: 160.sp,
                         width: 1.sw,
-                        child: ChangeNotifierProvider.value(
-                          value: widget.character.listCharacterComics,
-                          child: Consumer<ListCharacterComics>(
-                            builder: (context, listCharacterComics, _) {
+                        child: BlocProvider.value(
+                          value: widget.character.listCharacterComicsCubit,
+                          child: BlocBuilder<ListCharacterComicsCubit,
+                              ListCharacterComics>(
+                            builder: (context, listCharacterComics) {
                               if (listCharacterComics.isNull &&
                                   listCharacterComics.isLoading) {
                                 return Center(

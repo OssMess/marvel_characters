@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../../data/models.dart';
-import '../../../model/firestore_path.dart';
+import '../models.dart';
+import 'firestore_path.dart';
 
-class UserSessionService {
+class UserSessionRepository {
   // static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // static final FirebaseMessaging _messaging = FirebaseMessaging.instance;

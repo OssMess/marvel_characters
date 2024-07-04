@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../app.dart';
-import '../mvc/model/enums.dart';
+import '../data/enums.dart';
 import '../tools.dart';
 
 extension DialogStateExtensions on DialogState {

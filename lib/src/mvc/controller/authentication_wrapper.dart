@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../business_logic/cubits.dart';
+import '../../data/data_providers.dart';
 import '../../settings/settings_controller.dart';
 import '../../tools.dart';
-import '../model/models.dart';
 import '../view/screens.dart';
+import 'hives.dart';
 
 /// This class is responsable for data flow down the widget tree as well as managing which widget is displayed including:
 /// - `SplashScreen`: displayed when the data is still being prepared and the app is still not ready for use,
@@ -36,23 +39,44 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserSession>(
-      builder: (context, userSession, _) {
-        if (userSession.isAwaiting) {
-          return SplashScreen(
-            userSession: userSession,
-            exception: userSession.error,
-          );
+    return StreamBuilder<User?>(
+      stream: FirebaseAuthenticationRepository().onChangeAuthState(),
+      builder: (context, snapshot) {
+        // Awaiting auth state
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SplashScreen();
         }
-        if (userSession.isUnauthenticated) {
+        // Unauthenticated
+        if (snapshot.data == null) {
           return AuthenticationRouter(
-            userSession: userSession,
             settingsController: widget.settingsController,
           );
         }
-        return MainScreen(
-          userSession: userSession,
-          settingsController: widget.settingsController,
+        // Authenticated
+        return FutureBuilder(
+          future: FirebaseAuthenticationRepository.userFromFirebaseUser(
+            FirebaseAuth.instance.currentUser!,
+          ),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const SplashScreen();
+            }
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<UserSessionCubit>(
+                  create: (context) =>
+                      UserSessionCubit.fromUserSession(snapshot.data!),
+                ),
+                BlocProvider<ListCharactersCubit>(
+                  create: (context) => ListCharactersCubit(HiveCharacters())
+                    ..initData(callGet: true),
+                ),
+              ],
+              child: MainScreen(
+                settingsController: widget.settingsController,
+              ),
+            );
+          },
         );
       },
     );

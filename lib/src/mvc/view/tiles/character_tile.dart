@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models.dart';
-import '../../model/models.dart';
 import '../../../tools.dart';
 import '../screens.dart';
 

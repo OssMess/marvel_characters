@@ -5,19 +5,16 @@ import 'package:flutter/material.dart';
 
 import '../../../../tools.dart';
 import '../../../controller/services.dart';
-import '../../../model/enums.dart';
-import '../../../model/models.dart';
+import '../../../../data/enums.dart';
 import '../../model_widgets.dart';
 import '../../screens.dart';
 
 class Signin extends StatefulWidget {
   const Signin({
     super.key,
-    required this.userSession,
     required this.authRouteNotifier,
   });
 
-  final UserSession userSession;
   final ValueNotifier<AuthRoute> authRouteNotifier;
 
   @override
@@ -34,7 +31,6 @@ class _SigninState extends State<Signin> {
   @override
   Widget build(BuildContext context) {
     return AuthenticationPage(
-      userSession: widget.userSession,
       onPressedLeadingAppBar: null,
       title: AppLocalizations.of(context)!.signin,
       subtitle: AppLocalizations.of(context)!.signin_hint,
@@ -82,7 +78,6 @@ class _SigninState extends State<Signin> {
                   recognizer: TapGestureRecognizer()
                     ..onTap = () => context.push(
                           widget: ForgotPassword(
-                            userSession: widget.userSession,
                             authRouteNotifier: widget.authRouteNotifier,
                           ),
                         ),
@@ -116,8 +111,7 @@ class _SigninState extends State<Signin> {
       });
     }
     await Dialogs.of(context).runAsyncAction(
-      future: () => FirebaseAuthenticationService.signInWithEmailAndPassword(
-        userSession: widget.userSession,
+      future: () => FirebaseAuthenticationRepository.signInWithEmailAndPassword(
         email: email!,
         password: password!,
       ),
