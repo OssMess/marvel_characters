@@ -123,6 +123,9 @@ class _MainScreenState extends State<MainScreen> {
                             widget: MultiBlocProvider(
                               providers: [
                                 BlocProvider.value(
+                                  value: BlocProvider.of<UserCubit>(context),
+                                ),
+                                BlocProvider.value(
                                   value: BlocProvider.of<
                                       ListCharactersBookmarkedCubit>(context),
                                 ),

@@ -35,6 +35,7 @@ class CharacterTile extends StatelessWidget {
       ),
       child: BlocBuilder<CharacterCubit, CharacterState>(
         builder: (context, state) {
+          state as Character;
           return Row(
             children: [
               SizedBox(

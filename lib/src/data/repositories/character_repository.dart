@@ -15,10 +15,10 @@ class CharacterRepository {
     );
     List<CharacterState> list = List.from(result['data']['results'])
         .map(
-          (e) => CharacterState.fromJson(
+          (e) => Character.fromJson(
             e,
             listCharactersBookmarkedState.list
-                .where((element) => element.state.id == e['id'])
+                .where((element) => (element.state as Character).id == e['id'])
                 .isNotEmpty,
           ),
         )
@@ -32,7 +32,8 @@ class CharacterRepository {
   }
 
   Future<void> bookmarkCharacter(CharacterState character) async {
-    if (character.isBookmarked) {
+    assert(character is Character, 'character must be Character');
+    if ((character as Character).isBookmarked) {
       deleteBookmark(character);
     } else {
       addBookmark(character);
@@ -42,10 +43,12 @@ class CharacterRepository {
   void addBookmark(
     CharacterState character,
   ) {
-    character.isBookmarked = true;
+    assert(character is Character, 'character must be Character');
+    (character as Character).isBookmarked = true;
   }
 
   void deleteBookmark(CharacterState character) {
-    character.isBookmarked = false;
+    assert(character is Character, 'character must be Character');
+    (character as Character).isBookmarked = false;
   }
 }

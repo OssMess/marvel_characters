@@ -21,11 +21,12 @@ class FavoriteCharacters extends StatelessWidget {
           return ListView.separated(
             padding: EdgeInsets.all(24.sp),
             itemCount: state.list.length,
-            itemBuilder: (context, index) => BlocProvider(
-              create: (context) => CharacterCubit(
-                state.list.elementAt(index).state,
+            itemBuilder: (context, index) => BlocProvider.value(
+              value: state.list.elementAt(index),
+              child: BlocProvider.value(
+                value: state.list.elementAt(index),
+                child: const CharacterTile(),
               ),
-              child: const CharacterTile(),
             ),
             separatorBuilder: (_, __) => 30.height,
           );

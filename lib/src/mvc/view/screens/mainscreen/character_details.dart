@@ -55,7 +55,7 @@ class _CharacterDetailsState extends State<CharacterDetails> {
             icon: BlocBuilder<CharacterCubit, CharacterState>(
               builder: (context, state) {
                 return Icon(
-                  state.isBookmarked
+                  (state as Character).isBookmarked
                       ? AwesomeIconsSolid.heart
                       : AwesomeIconsRegular.heart,
                 );
@@ -64,190 +64,165 @@ class _CharacterDetailsState extends State<CharacterDetails> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            //Header
-            SizedBox(
-              width: 1.sw,
-              height: 1.sw,
-              child: Hero(
-                tag:
-                    'character${BlocProvider.of<CharacterCubit>(context).state.id}',
-                child: Stack(
-                  children: [
-                    Image(
-                      fit: BoxFit.cover,
-                      image:
-                          BlocProvider.of<CharacterCubit>(context).state.photo,
-                    ),
-                    Positioned.fill(
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: const [
-                              0.0,
-                              0.1,
-                              0.6,
-                              1,
-                            ],
-                            colors: [
-                              context.b6,
-                              Colors.transparent,
-                              Colors.transparent,
-                              context.b6,
-                            ],
+      body: Builder(builder: (context) {
+        Character character =
+            BlocProvider.of<CharacterCubit>(context).state as Character;
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              //Header
+              SizedBox(
+                width: 1.sw,
+                height: 1.sw,
+                child: Hero(
+                  tag: 'character${character.id}',
+                  child: Stack(
+                    children: [
+                      Image(
+                        fit: BoxFit.cover,
+                        image: character.photo,
+                      ),
+                      Positioned.fill(
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              stops: const [
+                                0.0,
+                                0.1,
+                                0.6,
+                                1,
+                              ],
+                              colors: [
+                                context.b6,
+                                Colors.transparent,
+                                Colors.transparent,
+                                context.b6,
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            //Body
-            Padding(
-              padding: EdgeInsets.all(24.sp).add(
-                EdgeInsets.only(
-                  bottom: context.viewPadding.bottom,
+              //Body
+              Padding(
+                padding: EdgeInsets.all(24.sp).add(
+                  EdgeInsets.only(
+                    bottom: context.viewPadding.bottom,
+                  ),
                 ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Title/Name
-                  Text(
-                    BlocProvider.of<CharacterCubit>(context).state.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.h2b1,
-                  ),
-                  Text(
-                    '#${BlocProvider.of<CharacterCubit>(context).state.id}',
-                    style: context.h4b2,
-                  ),
-                  //Description
-                  if (BlocProvider.of<CharacterCubit>(context)
-                      .state
-                      .description
-                      .trim()
-                      .isNotEmpty) ...[
-                    30.heightSp,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Title/Name
                     Text(
-                      AppLocalizations.of(context)!.description,
+                      character.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: context.h2b1,
                     ),
                     Text(
-                      BlocProvider.of<CharacterCubit>(context)
-                          .state
-                          .description,
+                      '#${character.id}',
                       style: context.h4b2,
                     ),
-                  ],
-                  //Links
-                  if (BlocProvider.of<CharacterCubit>(context)
-                      .state
-                      .urls
-                      .isNotEmpty) ...[
-                    16.heightSp,
-                    Text(
-                      AppLocalizations.of(context)!.links,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.h2b1,
-                    ),
-                    if (BlocProvider.of<CharacterCubit>(context)
-                        .state
-                        .hasDetailsUrl)
-                      ReadMoreLink(
-                        title: AppLocalizations.of(context)!.read_more_detail,
-                        url: BlocProvider.of<CharacterCubit>(context)
-                            .state
-                            .detailUrl,
+                    //Description
+                    if (character.description.trim().isNotEmpty) ...[
+                      30.heightSp,
+                      Text(
+                        AppLocalizations.of(context)!.description,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.h2b1,
                       ),
-                    if (BlocProvider.of<CharacterCubit>(context)
-                        .state
-                        .hasWikiUrl)
-                      ReadMoreLink(
-                        title: AppLocalizations.of(context)!.read_more_wiki,
-                        url: BlocProvider.of<CharacterCubit>(context)
-                            .state
-                            .wikiUrl,
+                      Text(
+                        character.description,
+                        style: context.h4b2,
                       ),
-                    if (BlocProvider.of<CharacterCubit>(context)
-                        .state
-                        .hasComicLinkUrl)
-                      ReadMoreLink(
-                        title:
-                            AppLocalizations.of(context)!.read_more_comic_link,
-                        url: BlocProvider.of<CharacterCubit>(context)
-                            .state
-                            .comiclinkUrl,
+                    ],
+                    //Links
+                    if (character.urls.isNotEmpty) ...[
+                      16.heightSp,
+                      Text(
+                        AppLocalizations.of(context)!.links,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.h2b1,
                       ),
-                  ],
-                  //Comics
-                  if (BlocProvider.of<CharacterCubit>(context)
-                      .state
-                      .comics
-                      .items
-                      .isNotEmpty) ...[
-                    30.heightSp,
-                    Text(
-                      '${AppLocalizations.of(context)!.comics} (${BlocProvider.of<CharacterCubit>(context).state.comics.items.length})',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.h2b1,
-                    ),
-                    UnconstrainedBox(
-                      child: SizedBox(
-                        height: 160.sp,
-                        width: 1.sw,
-                        child: BlocProvider.value(
-                          value: BlocProvider.of<CharacterCubit>(context)
-                              .state
-                              .listCharacterComicsCubit,
-                          child: BlocBuilder<ListCharacterComicsCubit,
-                              ListCharacterComics>(
-                            builder: (context, listCharacterComics) {
-                              if (listCharacterComics.isNull &&
-                                  listCharacterComics.isLoading) {
-                                return Center(
-                                  child: SpinKitCubeGrid(
-                                    size: 30.sp,
-                                    color: Colors.red,
-                                  ),
+                      if (character.hasDetailsUrl)
+                        ReadMoreLink(
+                          title: AppLocalizations.of(context)!.read_more_detail,
+                          url: character.detailUrl,
+                        ),
+                      if (character.hasWikiUrl)
+                        ReadMoreLink(
+                          title: AppLocalizations.of(context)!.read_more_wiki,
+                          url: character.wikiUrl,
+                        ),
+                      if (character.hasComicLinkUrl)
+                        ReadMoreLink(
+                          title: AppLocalizations.of(context)!
+                              .read_more_comic_link,
+                          url: character.comiclinkUrl,
+                        ),
+                    ],
+                    //Comics
+                    if (character.comics.items.isNotEmpty) ...[
+                      30.heightSp,
+                      Text(
+                        '${AppLocalizations.of(context)!.comics} (${character.comics.items.length})',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.h2b1,
+                      ),
+                      UnconstrainedBox(
+                        child: SizedBox(
+                          height: 160.sp,
+                          width: 1.sw,
+                          child: BlocProvider.value(
+                            value: character.listCharacterComicsCubit,
+                            child: BlocBuilder<ListCharacterComicsCubit,
+                                ListCharacterComics>(
+                              builder: (context, listCharacterComics) {
+                                if (listCharacterComics.isNull &&
+                                    listCharacterComics.isLoading) {
+                                  return Center(
+                                    child: SpinKitCubeGrid(
+                                      size: 30.sp,
+                                      color: Colors.red,
+                                    ),
+                                  );
+                                }
+                                return ListView.separated(
+                                  controller: scrollController,
+                                  scrollDirection: Axis.horizontal,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 24.sp),
+                                  itemBuilder: (context, index) {
+                                    CharacterComic characterComic =
+                                        listCharacterComics.elementAt(index);
+                                    return CharacterComicTile(
+                                        characterComic: characterComic);
+                                  },
+                                  separatorBuilder: (_, __) => 10.widthSp,
+                                  itemCount: listCharacterComics.length,
                                 );
-                              }
-                              return ListView.separated(
-                                controller: scrollController,
-                                scrollDirection: Axis.horizontal,
-                                padding:
-                                    EdgeInsets.symmetric(horizontal: 24.sp),
-                                itemBuilder: (context, index) {
-                                  CharacterComic characterComic =
-                                      listCharacterComics.elementAt(index);
-                                  return CharacterComicTile(
-                                      characterComic: characterComic);
-                                },
-                                separatorBuilder: (_, __) => 10.widthSp,
-                                itemCount: listCharacterComics.length,
-                              );
-                            },
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
-                ],
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }

@@ -24,16 +24,19 @@ class ListCharactersBookmarkedState extends Equatable {
 
   /// Save [character] to `_box`.
   Future<void> add(CharacterCubit character) async {
+    assert(character.state is Character, 'character must be Character');
     list.add(character);
     await box.put(
-      character.state.id,
-      character.state.toJson(),
+      (character.state as Character).id,
+      (character.state as Character).toJson(),
     );
   }
 
   Future<void> remove(CharacterCubit character) async {
-    list.removeWhere((element) => character.state.id == element.state.id);
-    await box.delete(character.state.id);
+    assert(character.state is Character, 'character must be Character');
+    list.removeWhere((element) =>
+        (character.state as Character).id == (element.state as Character).id);
+    await box.delete((character.state as Character).id);
   }
 
   /// Clear Hive `_box`

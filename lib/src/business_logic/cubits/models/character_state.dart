@@ -2,6 +2,22 @@ part of 'character_cubit.dart';
 
 // ignore: must_be_immutable
 class CharacterState extends Equatable {
+  const CharacterState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class CharacterLoading extends CharacterState {
+  const CharacterLoading();
+}
+
+class CharacterError extends CharacterState {
+  const CharacterError();
+}
+
+// ignore: must_be_immutable
+class Character extends CharacterState {
   final int id;
   final String name;
   final String description;
@@ -17,7 +33,7 @@ class CharacterState extends Equatable {
   bool isBookmarked;
   final ListCharacterComicsCubit listCharacterComicsCubit;
 
-  CharacterState({
+  Character({
     required this.id,
     required this.name,
     required this.description,
@@ -34,11 +50,11 @@ class CharacterState extends Equatable {
     required this.listCharacterComicsCubit,
   });
 
-  factory CharacterState.fromJson(
+  factory Character.fromJson(
     Map<dynamic, dynamic> json,
     bool isBookmarked,
   ) =>
-      CharacterState(
+      Character(
         id: json['id'],
         name: json['name'],
         description: json['description'],
@@ -88,7 +104,4 @@ class CharacterState extends Equatable {
 
   String get comiclinkUrl =>
       urls.firstWhere((element) => element.type == 'comiclink').url;
-
-  @override
-  List<Object?> get props => [];
 }
