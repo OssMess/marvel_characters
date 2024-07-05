@@ -174,8 +174,13 @@ class _MainScreenState extends State<MainScreen> {
                     sliver: SliverList.separated(
                       itemBuilder: (context, index) {
                         if (index < listCharacters.length) {
-                          return CharacterTile(
-                            character: listCharacters.elementAt(index),
+                          return BlocProvider<CharacterCubit>.value(
+                            value: CharacterCubit(
+                              BlocProvider.of<ListCharactersCubit>(context)
+                                  .state
+                                  .elementAt(index),
+                            ),
+                            child: const CharacterTile(),
                           );
                         }
                         return CustomTrailingTile(

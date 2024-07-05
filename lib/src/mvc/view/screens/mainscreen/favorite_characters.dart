@@ -21,12 +21,11 @@ class FavoriteCharacters extends StatelessWidget {
             padding: EdgeInsets.all(24.sp),
             itemCount:
                 (userSessionState as UserSession).hiveCharacters.list.length,
-            itemBuilder: (context, index) => BlocProvider.value(
-              value: BlocProvider.of<UserCubit>(context),
-              child: CharacterTile(
-                character:
-                    userSessionState.hiveCharacters.list.elementAt(index),
+            itemBuilder: (context, index) => BlocProvider(
+              create: (context) => CharacterCubit(
+                userSessionState.hiveCharacters.list.elementAt(index),
               ),
+              child: const CharacterTile(),
             ),
             separatorBuilder: (_, __) => 30.height,
           );

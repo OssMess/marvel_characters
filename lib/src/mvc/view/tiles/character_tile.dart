@@ -6,85 +6,90 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 import '../../../business_logic/cubits.dart';
-import '../../../data/models.dart';
 import '../../../tools.dart';
 import '../screens.dart';
 
 class CharacterTile extends StatelessWidget {
   const CharacterTile({
     super.key,
-    required this.character,
   });
-
-  final Character character;
 
   @override
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () => context.push(
-        widget: BlocProvider.value(
-          value: BlocProvider.of<UserCubit>(context),
-          child: CharacterDetails(
-            character: character,
-          ),
+        widget: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(
+              value: BlocProvider.of<UserCubit>(context),
+            ),
+            BlocProvider.value(
+              value: BlocProvider.of<CharacterCubit>(context),
+            ),
+          ],
+          child: const CharacterDetails(),
         ),
       ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 82.sp,
-            height: 82.sp,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(14.sp),
-              child: Hero(
-                tag: 'character${character.id}',
-                child: Image(
-                  fit: BoxFit.cover,
-                  image: character.photo,
+      child: BlocBuilder<CharacterCubit, CharacterState>(
+        builder: (context, state) {
+          return Row(
+            children: [
+              SizedBox(
+                width: 82.sp,
+                height: 82.sp,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14.sp),
+                  child: Hero(
+                    tag: 'character${state.id}',
+                    child: Image(
+                      fit: BoxFit.cover,
+                      image: state.photo,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          14.widthSp,
-          Expanded(
-            child: SizedBox(
-              height: 82.sp,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    character.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.h3b1,
-                  ),
-                  Text(
-                    '#${character.id}',
-                    style: context.h5b2,
-                  ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              14.widthSp,
+              Expanded(
+                child: SizedBox(
+                  height: 82.sp,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TitleNumberFormater(
-                        title: AppLocalizations.of(context)!.comics,
-                        number: character.comics.items.length,
+                      Text(
+                        state.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.h3b1,
                       ),
-                      TitleNumberFormater(
-                        title: AppLocalizations.of(context)!.series,
-                        number: character.series.items.length,
+                      Text(
+                        '#${state.id}',
+                        style: context.h5b2,
                       ),
-                      TitleNumberFormater(
-                        title: AppLocalizations.of(context)!.events,
-                        number: character.events.items.length,
+                      const Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TitleNumberFormater(
+                            title: AppLocalizations.of(context)!.comics,
+                            number: state.comics.items.length,
+                          ),
+                          TitleNumberFormater(
+                            title: AppLocalizations.of(context)!.series,
+                            number: state.series.items.length,
+                          ),
+                          TitleNumberFormater(
+                            title: AppLocalizations.of(context)!.events,
+                            number: state.events.items.length,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ],
+            ],
+          );
+        },
       ),
     );
   }

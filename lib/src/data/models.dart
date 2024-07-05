@@ -1,6 +1,5 @@
 export 'models/backend_exception.dart';
 export 'models/character_comic.dart';
-export 'models/character.dart';
 export 'models/characters_item.dart';
 export 'models/characters.dart';
 export 'models/comic.dart';

@@ -1,9 +1,9 @@
+import '../../business_logic/cubits.dart';
 import '../list_models.dart';
 import '../../mvc/controller/hives.dart';
-import '../models.dart';
 import '../repositories.dart';
 
-class ListCharacters extends ListModelsPagination<Character> {
+class ListCharacters extends ListModelsPagination<CharacterState> {
   /// The repository used to communicate with the backend.
   final CharacterRepository characterRepository = CharacterRepository();
 

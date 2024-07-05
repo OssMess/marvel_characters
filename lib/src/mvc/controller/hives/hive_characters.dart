@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../../data/models.dart';
+import '../../../business_logic/cubits.dart';
 
 class HiveCharacters with ChangeNotifier {
   late Box _box;
 
-  List<Character> list = [];
+  List<CharacterState> list = [];
 
   final String _boxName = 'characters';
 
@@ -16,7 +16,7 @@ class HiveCharacters with ChangeNotifier {
     if (_box.isNotEmpty) {
       list = List.from(_box.values)
           .map(
-            (e) => Character.fromJson(
+            (e) => CharacterState.fromJson(
               e,
               list,
             ),
@@ -26,7 +26,7 @@ class HiveCharacters with ChangeNotifier {
   }
 
   /// Save [json] to `_box`.
-  Future<void> save(Character character) async {
+  Future<void> save(CharacterState character) async {
     list.add(character);
     notifyListeners();
     await _box.put(
@@ -35,7 +35,7 @@ class HiveCharacters with ChangeNotifier {
     );
   }
 
-  Future<void> delete(Character searchHistory) async {
+  Future<void> delete(CharacterState searchHistory) async {
     list.remove(searchHistory);
     notifyListeners();
     await _box.delete(searchHistory.id);

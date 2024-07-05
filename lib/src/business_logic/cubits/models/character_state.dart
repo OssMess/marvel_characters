@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../business_logic/cubits.dart';
-import '../../mvc/controller/hives.dart';
-import '../models.dart';
+import '../../cubits.dart';
+import '../../../mvc/controller/hives.dart';
+import '../../../data/models.dart';
 
-class Character with ChangeNotifier {
+class CharacterState with ChangeNotifier {
   final int id;
   final String name;
   final String description;
@@ -21,7 +21,7 @@ class Character with ChangeNotifier {
   bool isBookmarked;
   final ListCharacterComicsCubit listCharacterComicsCubit;
 
-  Character({
+  CharacterState({
     required this.id,
     required this.name,
     required this.description,
@@ -38,9 +38,9 @@ class Character with ChangeNotifier {
     required this.listCharacterComicsCubit,
   });
 
-  factory Character.fromJson(
-          Map<dynamic, dynamic> json, List<Character> bookmarkedCharacters) =>
-      Character(
+  factory CharacterState.fromJson(Map<dynamic, dynamic> json,
+          List<CharacterState> bookmarkedCharacters) =>
+      CharacterState(
         id: json['id'],
         name: json['name'],
         description: json['description'],

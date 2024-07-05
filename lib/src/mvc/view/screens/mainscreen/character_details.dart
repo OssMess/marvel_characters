@@ -14,10 +14,7 @@ import '../../tiles.dart';
 class CharacterDetails extends StatefulWidget {
   const CharacterDetails({
     super.key,
-    required this.character,
   });
-
-  final Character character;
 
   @override
   State<CharacterDetails> createState() => _CharacterDetailsState();
@@ -28,10 +25,17 @@ class _CharacterDetailsState extends State<CharacterDetails> {
 
   @override
   void initState() {
-    widget.character.listCharacterComicsCubit
-        .addControllerListener(scrollController);
-    widget.character.listCharacterComicsCubit.initData(callGet: true);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!context.mounted) return;
+      BlocProvider.of<CharacterCubit>(context).init(scrollController);
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,21 +46,20 @@ class _CharacterDetailsState extends State<CharacterDetails> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         actions: [
-          AnimatedBuilder(
-            animation: widget.character,
-            builder: (context, _) {
-              return IconButton(
-                onPressed: () => widget.character.bookmark(
-                  (BlocProvider.of<UserCubit>(context).state as UserSession)
-                      .hiveCharacters,
-                ),
-                icon: Icon(
-                  widget.character.isBookmarked
+          IconButton(
+            onPressed: () => BlocProvider.of<CharacterCubit>(context).bookmark(
+              (BlocProvider.of<UserCubit>(context).state as UserSession)
+                  .hiveCharacters,
+            ),
+            icon: BlocBuilder<CharacterCubit, CharacterState>(
+              builder: (context, state) {
+                return Icon(
+                  state.isBookmarked
                       ? AwesomeIconsSolid.heart
                       : AwesomeIconsRegular.heart,
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -68,12 +71,14 @@ class _CharacterDetailsState extends State<CharacterDetails> {
               width: 1.sw,
               height: 1.sw,
               child: Hero(
-                tag: 'character${widget.character.id}',
+                tag:
+                    'character${BlocProvider.of<CharacterCubit>(context).state.id}',
                 child: Stack(
                   children: [
                     Image(
                       fit: BoxFit.cover,
-                      image: widget.character.photo,
+                      image:
+                          BlocProvider.of<CharacterCubit>(context).state.photo,
                     ),
                     Positioned.fill(
                       child: DecoratedBox(
@@ -113,17 +118,21 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                 children: [
                   //Title/Name
                   Text(
-                    widget.character.name,
+                    BlocProvider.of<CharacterCubit>(context).state.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: context.h2b1,
                   ),
                   Text(
-                    '#${widget.character.id}',
+                    '#${BlocProvider.of<CharacterCubit>(context).state.id}',
                     style: context.h4b2,
                   ),
                   //Description
-                  if (widget.character.description.trim().isNotEmpty) ...[
+                  if (BlocProvider.of<CharacterCubit>(context)
+                      .state
+                      .description
+                      .trim()
+                      .isNotEmpty) ...[
                     30.heightSp,
                     Text(
                       AppLocalizations.of(context)!.description,
@@ -132,12 +141,17 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                       style: context.h2b1,
                     ),
                     Text(
-                      widget.character.description,
+                      BlocProvider.of<CharacterCubit>(context)
+                          .state
+                          .description,
                       style: context.h4b2,
                     ),
                   ],
                   //Links
-                  if (widget.character.urls.isNotEmpty) ...[
+                  if (BlocProvider.of<CharacterCubit>(context)
+                      .state
+                      .urls
+                      .isNotEmpty) ...[
                     16.heightSp,
                     Text(
                       AppLocalizations.of(context)!.links,
@@ -145,28 +159,44 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                       overflow: TextOverflow.ellipsis,
                       style: context.h2b1,
                     ),
-                    if (widget.character.hasDetailsUrl)
+                    if (BlocProvider.of<CharacterCubit>(context)
+                        .state
+                        .hasDetailsUrl)
                       ReadMoreLink(
                         title: AppLocalizations.of(context)!.read_more_detail,
-                        url: widget.character.detailUrl,
+                        url: BlocProvider.of<CharacterCubit>(context)
+                            .state
+                            .detailUrl,
                       ),
-                    if (widget.character.hasWikiUrl)
+                    if (BlocProvider.of<CharacterCubit>(context)
+                        .state
+                        .hasWikiUrl)
                       ReadMoreLink(
                         title: AppLocalizations.of(context)!.read_more_wiki,
-                        url: widget.character.wikiUrl,
+                        url: BlocProvider.of<CharacterCubit>(context)
+                            .state
+                            .wikiUrl,
                       ),
-                    if (widget.character.hasComicLinkUrl)
+                    if (BlocProvider.of<CharacterCubit>(context)
+                        .state
+                        .hasComicLinkUrl)
                       ReadMoreLink(
                         title:
                             AppLocalizations.of(context)!.read_more_comic_link,
-                        url: widget.character.comiclinkUrl,
+                        url: BlocProvider.of<CharacterCubit>(context)
+                            .state
+                            .comiclinkUrl,
                       ),
                   ],
                   //Comics
-                  if (widget.character.comics.items.isNotEmpty) ...[
+                  if (BlocProvider.of<CharacterCubit>(context)
+                      .state
+                      .comics
+                      .items
+                      .isNotEmpty) ...[
                     30.heightSp,
                     Text(
-                      '${AppLocalizations.of(context)!.comics} (${widget.character.comics.items.length})',
+                      '${AppLocalizations.of(context)!.comics} (${BlocProvider.of<CharacterCubit>(context).state.comics.items.length})',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: context.h2b1,
@@ -176,7 +206,9 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                         height: 160.sp,
                         width: 1.sw,
                         child: BlocProvider.value(
-                          value: widget.character.listCharacterComicsCubit,
+                          value: BlocProvider.of<CharacterCubit>(context)
+                              .state
+                              .listCharacterComicsCubit,
                           child: BlocBuilder<ListCharacterComicsCubit,
                               ListCharacterComics>(
                             builder: (context, listCharacterComics) {
@@ -212,9 +244,6 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                 ],
               ),
             ),
-            // if (widget.character.comics.items.isNotEmpty) ...[
-
-            // ],
           ],
         ),
       ),

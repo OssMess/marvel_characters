@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/list_models.dart';
-import '../../../data/models.dart';
 import '../../../data/repositories.dart';
 import '../../../mvc/controller/hives.dart';
+import '../../cubits.dart';
 
 class ListCharactersCubit extends Cubit<ListCharacters> {
   final CharacterRepository characterRepository = CharacterRepository();
@@ -66,7 +66,7 @@ class ListCharactersCubit extends Cubit<ListCharacters> {
 
   /// Update list with query result, and notify listeners
   void update(
-    Set<Character> result,
+    Set<CharacterState> result,
     int total,
     bool error,
     bool refresh,
