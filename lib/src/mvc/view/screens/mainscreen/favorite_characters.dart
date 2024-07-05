@@ -23,7 +23,7 @@ class FavoriteCharacters extends StatelessWidget {
             itemCount: state.list.length,
             itemBuilder: (context, index) => BlocProvider(
               create: (context) => CharacterCubit(
-                state.list.elementAt(index),
+                state.list.elementAt(index).state,
               ),
               child: const CharacterTile(),
             ),

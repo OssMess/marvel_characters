@@ -4,7 +4,7 @@ part of 'list_characters_bookmarked_cubit.dart';
 class ListCharactersBookmarkedState extends Equatable {
   late Box box;
 
-  final List<CharacterState> list = [];
+  final List<CharacterCubit> list = [];
 
   final String boxName = 'characters';
 
@@ -13,29 +13,27 @@ class ListCharactersBookmarkedState extends Equatable {
   Future<void> init() async {
     box = await Hive.openBox(boxName);
     if (box.isNotEmpty) {
-      list.addAll(
-        List.from(box.values).map(
-          (e) => CharacterState.fromJson(
-            e,
-            list,
-          ),
+      list.addAll(List.from(box.values).map(
+        (e) => CharacterCubit.fromJson(
+          e,
+          true,
         ),
-      );
+      ));
     }
   }
 
   /// Save [character] to `_box`.
-  Future<void> add(CharacterState character) async {
+  Future<void> add(CharacterCubit character) async {
     list.add(character);
     await box.put(
-      character.id,
-      character.toJson(),
+      character.state.id,
+      character.state.toJson(),
     );
   }
 
-  Future<void> remove(CharacterState searchHistory) async {
-    list.remove(searchHistory);
-    await box.delete(searchHistory.id);
+  Future<void> remove(CharacterCubit character) async {
+    list.removeWhere((element) => character.state.id == element.state.id);
+    await box.delete(character.state.id);
   }
 
   /// Clear Hive `_box`

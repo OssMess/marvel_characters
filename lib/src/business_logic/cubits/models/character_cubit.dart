@@ -17,9 +17,14 @@ class CharacterCubit extends Cubit<CharacterState> {
 
   factory CharacterCubit.fromJson(
     Map<dynamic, dynamic> json,
-    List<CharacterState> bookmarkedCharacters,
+    bool isBookmarked,
   ) =>
-      CharacterCubit(CharacterState.fromJson(json, bookmarkedCharacters));
+      CharacterCubit(
+        CharacterState.fromJson(
+          json,
+          isBookmarked,
+        ),
+      );
 
   bool bookmark() {
     repository.bookmarkCharacter(state);

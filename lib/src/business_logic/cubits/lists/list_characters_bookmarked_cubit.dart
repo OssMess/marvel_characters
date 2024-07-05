@@ -20,9 +20,9 @@ class ListCharactersBookmarkedCubit
   /// Bookmark [character] to `_box`.
   Future<void> bookmark(CharacterCubit character) async {
     if (character.bookmark()) {
-      state.add(character.state);
+      state.add(character);
     } else {
-      state.remove(character.state);
+      state.remove(character);
     }
     emit(state);
   }

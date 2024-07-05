@@ -14,8 +14,14 @@ class CharacterRepository {
       limit: listCharacters.state.limit,
     );
     List<CharacterState> list = List.from(result['data']['results'])
-        .map((e) =>
-            CharacterState.fromJson(e, listCharactersBookmarkedState.list))
+        .map(
+          (e) => CharacterState.fromJson(
+            e,
+            listCharactersBookmarkedState.list
+                .where((element) => element.state.id == e['id'])
+                .isNotEmpty,
+          ),
+        )
         .toList();
     listCharacters.update(
       list.toSet(),

@@ -34,8 +34,10 @@ class CharacterState extends Equatable {
     required this.listCharacterComicsCubit,
   });
 
-  factory CharacterState.fromJson(Map<dynamic, dynamic> json,
-          List<CharacterState> bookmarkedCharacters) =>
+  factory CharacterState.fromJson(
+    Map<dynamic, dynamic> json,
+    bool isBookmarked,
+  ) =>
       CharacterState(
         id: json['id'],
         name: json['name'],
@@ -51,9 +53,7 @@ class CharacterState extends Equatable {
         stories: Stories.fromJson(json['stories']),
         events: Comics.fromJson(json['events']),
         series: Comics.fromJson(json['series']),
-        isBookmarked: bookmarkedCharacters
-            .where((element) => element.id == json['id'])
-            .isNotEmpty,
+        isBookmarked: isBookmarked,
         listCharacterComicsCubit: ListCharacterComicsCubit(json['id']),
       );
 
