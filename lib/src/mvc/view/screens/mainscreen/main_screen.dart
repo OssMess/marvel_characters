@@ -120,8 +120,13 @@ class _MainScreenState extends State<MainScreen> {
                       children: [
                         IconButton(
                           onPressed: () => context.push(
-                            widget: BlocProvider.value(
-                              value: BlocProvider.of<UserCubit>(context),
+                            widget: MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: BlocProvider.of<
+                                      ListCharactersBookmarkedCubit>(context),
+                                ),
+                              ],
                               child: const FavoriteCharacters(),
                             ),
                           ),

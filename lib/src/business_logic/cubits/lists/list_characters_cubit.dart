@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/list_models.dart';
 import '../../../data/repositories.dart';
-import '../../../mvc/controller/hives.dart';
 import '../../cubits.dart';
 
 class ListCharactersCubit extends Cubit<ListCharacters> {
   final CharacterRepository characterRepository = CharacterRepository();
+  final ListCharactersBookmarkedState listCharactersBookmarkedState;
 
-  ListCharactersCubit(HiveCharacters hiveCharacters)
-      : super(ListCharacters(hiveCharacters: hiveCharacters));
+  ListCharactersCubit(this.listCharactersBookmarkedState)
+      : super(ListCharacters());
 
   /// Init data.
   /// if [callGet] is `true` proceed with query, else break.
@@ -33,7 +33,7 @@ class ListCharactersCubit extends Cubit<ListCharacters> {
     required bool refresh,
   }) {
     return characterRepository.list(
-      bookmarkedCharacters: state.hiveCharacters.list,
+      listCharactersBookmarkedState: listCharactersBookmarkedState,
       listCharacters: this,
       refresh: refresh,
     );

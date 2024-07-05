@@ -47,9 +47,10 @@ class _CharacterDetailsState extends State<CharacterDetails> {
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-            onPressed: () => BlocProvider.of<CharacterCubit>(context).bookmark(
-              (BlocProvider.of<UserCubit>(context).state as UserSession)
-                  .hiveCharacters,
+            onPressed: () =>
+                BlocProvider.of<ListCharactersBookmarkedCubit>(context)
+                    .bookmark(
+              BlocProvider.of<CharacterCubit>(context),
             ),
             icon: BlocBuilder<CharacterCubit, CharacterState>(
               builder: (context, state) {

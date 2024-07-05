@@ -15,15 +15,15 @@ class FavoriteCharacters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: BlocBuilder<UserCubit, UserState>(
-        builder: (context, userSessionState) {
+      body: BlocBuilder<ListCharactersBookmarkedCubit,
+          ListCharactersBookmarkedState>(
+        builder: (context, state) {
           return ListView.separated(
             padding: EdgeInsets.all(24.sp),
-            itemCount:
-                (userSessionState as UserSession).hiveCharacters.list.length,
+            itemCount: state.list.length,
             itemBuilder: (context, index) => BlocProvider(
               create: (context) => CharacterCubit(
-                userSessionState.hiveCharacters.list.elementAt(index),
+                state.list.elementAt(index),
               ),
               child: const CharacterTile(),
             ),

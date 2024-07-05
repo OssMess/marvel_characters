@@ -5,7 +5,6 @@ import '../../business_logic/cubits.dart';
 import '../../settings/settings_controller.dart';
 import '../../tools.dart';
 import '../view/screens.dart';
-import 'hives.dart';
 
 /// This class is responsable for data flow down the widget tree as well as managing which widget is displayed including:
 /// - `SplashScreen`: displayed when the data is still being prepared and the app is still not ready for use,
@@ -26,6 +25,9 @@ class AuthenticationWrapper extends StatefulWidget {
 }
 
 class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
+  ListCharactersBookmarkedState listCharactersBookmarkedState =
+      ListCharactersBookmarkedState();
+
   @override
   void initState() {
     super.initState();
@@ -58,12 +60,18 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
           );
         }
         // Authenticated
-
         return MultiBlocProvider(
           providers: [
+            BlocProvider<ListCharactersBookmarkedCubit>(
+              lazy: false,
+              create: (context) =>
+                  ListCharactersBookmarkedCubit(listCharactersBookmarkedState)
+                    ..init(),
+            ),
             BlocProvider<ListCharactersCubit>(
-              create: (context) => ListCharactersCubit(HiveCharacters())
-                ..initData(callGet: true),
+              create: (context) =>
+                  ListCharactersCubit(listCharactersBookmarkedState)
+                    ..initData(callGet: true),
             ),
           ],
           child: MainScreen(

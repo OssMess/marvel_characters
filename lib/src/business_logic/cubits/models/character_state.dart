@@ -1,11 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+part of 'character_cubit.dart';
 
-import '../../cubits.dart';
-import '../../../mvc/controller/hives.dart';
-import '../../../data/models.dart';
-
-class CharacterState with ChangeNotifier {
+// ignore: must_be_immutable
+class CharacterState extends Equatable {
   final int id;
   final String name;
   final String description;
@@ -75,26 +71,6 @@ class CharacterState with ChangeNotifier {
         'series': series.toJson(),
       };
 
-  Future<void> bookmark(HiveCharacters hiveCharacters) async {
-    if (isBookmarked) {
-      await deleteBookmark(hiveCharacters);
-    } else {
-      await addBookmark(hiveCharacters);
-    }
-  }
-
-  Future<void> addBookmark(HiveCharacters hiveCharacters) async {
-    isBookmarked = true;
-    notifyListeners();
-    await hiveCharacters.save(this);
-  }
-
-  Future<void> deleteBookmark(HiveCharacters hiveCharacters) async {
-    isBookmarked = false;
-    notifyListeners();
-    await hiveCharacters.delete(this);
-  }
-
   bool get hasWikiUrl =>
       urls.where((element) => element.type == 'wiki').isNotEmpty;
 
@@ -112,53 +88,7 @@ class CharacterState with ChangeNotifier {
 
   String get comiclinkUrl =>
       urls.firstWhere((element) => element.type == 'comiclink').url;
-}
 
-class Comics {
-  final int available;
-  final int returned;
-  final String collectionUri;
-  final List<ComicsItem> items;
-
-  Comics({
-    required this.available,
-    required this.returned,
-    required this.collectionUri,
-    required this.items,
-  });
-
-  factory Comics.fromJson(Map<dynamic, dynamic> json) => Comics(
-        available: json['available'],
-        returned: json['returned'],
-        collectionUri: json['collectionURI'],
-        items: List<ComicsItem>.from(
-            json['items'].map((x) => ComicsItem.fromJson(x))),
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'available': available,
-        'returned': returned,
-        'collectionURI': collectionUri,
-        'items': List<dynamic>.from(items.map((x) => x.toJson())),
-      };
-}
-
-class ComicsItem {
-  final String resourceUri;
-  final String name;
-
-  ComicsItem({
-    required this.resourceUri,
-    required this.name,
-  });
-
-  factory ComicsItem.fromJson(Map<dynamic, dynamic> json) => ComicsItem(
-        resourceUri: json['resourceURI'],
-        name: json['name'],
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'resourceURI': resourceUri,
-        'name': name,
-      };
+  @override
+  List<Object?> get props => [];
 }

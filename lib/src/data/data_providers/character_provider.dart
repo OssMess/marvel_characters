@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import '../../business_logic/cubits.dart';
-import '../../mvc/controller/hives.dart';
 import '../data_providers.dart';
 import '../models.dart';
 
@@ -31,17 +29,17 @@ class CharacterProvider {
     }
   }
 
-  Future<void> addBookmark({
-    required HiveCharacters hiveCharacters,
-    required CharacterState character,
-  }) async {
-    await hiveCharacters.save(character);
-  }
+  // Future<void> addBookmark({
+  //   required HiveCharacters hiveCharacters,
+  //   required CharacterState character,
+  // }) async {
+  //   await hiveCharacters.save(character);
+  // }
 
-  Future<void> deleteBookmark({
-    required HiveCharacters hiveCharacters,
-    required CharacterState character,
-  }) async {
-    await hiveCharacters.delete(character);
-  }
+  // Future<void> deleteBookmark({
+  //   required HiveCharacters hiveCharacters,
+  //   required CharacterState character,
+  // }) async {
+  //   await hiveCharacters.delete(character);
+  // }
 }

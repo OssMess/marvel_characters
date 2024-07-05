@@ -3,6 +3,8 @@ export 'models/character_comic.dart';
 export 'models/characters_item.dart';
 export 'models/characters.dart';
 export 'models/comic.dart';
+export 'models/comics_item.dart';
+export 'models/comics.dart';
 export 'models/series.dart';
 export 'models/stories_item.dart';
 export 'models/stories.dart';

@@ -26,6 +26,9 @@ class CharacterTile extends StatelessWidget {
             BlocProvider.value(
               value: BlocProvider.of<CharacterCubit>(context),
             ),
+            BlocProvider.value(
+              value: BlocProvider.of<ListCharactersBookmarkedCubit>(context),
+            ),
           ],
           child: const CharacterDetails(),
         ),

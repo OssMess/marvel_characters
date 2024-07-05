@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/repositories.dart';
-import '../../../mvc/controller/hives.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:equatable/equatable.dart';
+
 import '../../cubits.dart';
+import '../../../data/models.dart';
+import '../../../data/repositories.dart';
+
+part 'character_state.dart';
 
 class CharacterCubit extends Cubit<CharacterState> {
   CharacterRepository repository = CharacterRepository();
@@ -16,12 +21,10 @@ class CharacterCubit extends Cubit<CharacterState> {
   ) =>
       CharacterCubit(CharacterState.fromJson(json, bookmarkedCharacters));
 
-  Future<void> bookmark(HiveCharacters hiveCharacters) async {
-    await repository.bookmarkCharacter(
-      hiveCharacters: hiveCharacters,
-      character: state,
-    );
+  bool bookmark() {
+    repository.bookmarkCharacter(state);
     emit(state);
+    return state.isBookmarked;
   }
 
   Future<void> init(ScrollController scrollController) async {

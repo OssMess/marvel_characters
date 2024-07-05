@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/enums.dart';
-import '../../../mvc/controller/hives.dart';
 import '../../../mvc/controller/services.dart';
 import '../../../tools/datetime_utils.dart';
 
@@ -25,12 +24,6 @@ class UserCubit extends Cubit<UserState> {
 
   void emitUserLoading() => emit(const UserLoading());
 
-  Future<void> initHives() async {
-    assert(
-        state is UserSession, 'UserState must be UserSession to call signOut.');
-    await (state as UserSession).hiveCharacters.init();
-  }
-
   Future<void> listenAuthStateChanges() async {
     FirebaseAuth.instance.authStateChanges().listen(
       (user) async {
@@ -40,10 +33,11 @@ class UserCubit extends Cubit<UserState> {
         } else {
           // user is connected
           try {
-            emit(await FirebaseAuthenticationRepository.userFromFirebaseUser(
-              user,
-            )
-              ..hiveCharacters.init());
+            emit(
+              await FirebaseAuthenticationRepository.userFromFirebaseUser(
+                user,
+              ),
+            );
           } on Exception catch (e) {
             // an error has occured
             emit(UserUnAuthenticated(e));

@@ -30,7 +30,6 @@ final class UserSession extends UserState {
   final String email;
   final DateTime updatedAt;
   final DateTime createdAt;
-  final HiveCharacters hiveCharacters;
 
   const UserSession({
     required this.authState,
@@ -39,7 +38,6 @@ final class UserSession extends UserState {
     required this.email,
     required this.updatedAt,
     required this.createdAt,
-    required this.hiveCharacters,
   });
 
   ///Use to build an instance of `UserSession` from [user] and [doc]
@@ -55,7 +53,6 @@ final class UserSession extends UserState {
       token: json['token'],
       createdAt: DateTimeUtils.getDateTimefromTimestamp(json['createdAt'])!,
       updatedAt: DateTimeUtils.getDateTimefromTimestamp(json['updatedAt'])!,
-      hiveCharacters: HiveCharacters(),
     );
   }
 
@@ -71,7 +68,6 @@ final class UserSession extends UserState {
       email: user.email!,
       updatedAt: DateTime.now(),
       createdAt: DateTime.now(),
-      hiveCharacters: HiveCharacters(),
     );
   }
 
@@ -88,7 +84,6 @@ final class UserSession extends UserState {
       email: userCredential.user!.email!,
       updatedAt: DateTime.now(),
       createdAt: DateTime.now(),
-      hiveCharacters: HiveCharacters(),
     );
   }
 
@@ -107,7 +102,6 @@ final class UserSession extends UserState {
       };
 
   Future<void> signOut() async {
-    await hiveCharacters.clear();
     await FirebaseAuthenticationRepository.signOut();
   }
 }

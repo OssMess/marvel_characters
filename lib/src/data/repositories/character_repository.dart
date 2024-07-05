@@ -1,12 +1,11 @@
 import '../../business_logic/cubits.dart';
-import '../../mvc/controller/hives.dart';
 import '../data_providers.dart';
 
 class CharacterRepository {
   final CharacterProvider provider = CharacterProvider();
 
   Future<void> list({
-    required List<CharacterState> bookmarkedCharacters,
+    required ListCharactersBookmarkedState listCharactersBookmarkedState,
     required ListCharactersCubit listCharacters,
     required bool refresh,
   }) async {
@@ -15,7 +14,8 @@ class CharacterRepository {
       limit: listCharacters.state.limit,
     );
     List<CharacterState> list = List.from(result['data']['results'])
-        .map((e) => CharacterState.fromJson(e, bookmarkedCharacters))
+        .map((e) =>
+            CharacterState.fromJson(e, listCharactersBookmarkedState.list))
         .toList();
     listCharacters.update(
       list.toSet(),
@@ -25,36 +25,21 @@ class CharacterRepository {
     );
   }
 
-  Future<void> bookmarkCharacter({
-    required HiveCharacters hiveCharacters,
-    required CharacterState character,
-  }) async {
+  Future<void> bookmarkCharacter(CharacterState character) async {
     if (character.isBookmarked) {
-      await deleteBookmark(
-        hiveCharacters: hiveCharacters,
-        character: character,
-      );
+      deleteBookmark(character);
     } else {
-      await addBookmark(
-        hiveCharacters: hiveCharacters,
-        character: character,
-      );
+      addBookmark(character);
     }
   }
 
-  Future<void> addBookmark({
-    required HiveCharacters hiveCharacters,
-    required CharacterState character,
-  }) async {
+  void addBookmark(
+    CharacterState character,
+  ) {
     character.isBookmarked = true;
-    await hiveCharacters.save(character);
   }
 
-  Future<void> deleteBookmark({
-    required HiveCharacters hiveCharacters,
-    required CharacterState character,
-  }) async {
+  void deleteBookmark(CharacterState character) {
     character.isBookmarked = false;
-    await hiveCharacters.delete(character);
   }
 }
