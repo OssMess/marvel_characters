@@ -31,17 +31,19 @@ class ComicRepository {
   }) async {
     Map<String, dynamic> result = await provider.listCharacterComics(
       characterId: characterId,
-      offset: listCharacterComics.state.offset,
-      limit: listCharacterComics.state.limit,
+      offset: listCharacterComics.state is ListCharacterComicsLoaded
+          ? (listCharacterComics.state as ListCharacterComicsLoaded).offset
+          : 0,
+      limit: listCharacterComics.state is ListCharacterComicsLoaded
+          ? (listCharacterComics.state as ListCharacterComicsLoaded).limit
+          : 10,
     );
-
     List<CharacterComic> list = List.from(result['data']['results'])
         .map((e) => CharacterComic.fromJson(e))
         .toList();
     listCharacterComics.update(
       list.toSet(),
       result['data']['total'],
-      false,
       refresh,
     );
   }

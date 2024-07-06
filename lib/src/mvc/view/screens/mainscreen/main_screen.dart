@@ -162,9 +162,6 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               BlocBuilder<ListCharactersCubit, ListCharactersState>(
-                buildWhen: (previous, current) {
-                  return true;
-                },
                 builder: (context, listCharacters) {
                   if (listCharacters is ListCharactersInitial ||
                       listCharacters is ListCharactersLoading) {

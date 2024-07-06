@@ -6,9 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../business_logic/cubits.dart';
-import '../../../../data/list_models.dart';
-import '../../../../data/models.dart';
 import '../../../../tools.dart';
+import '../../model_widgets.dart';
 import '../../tiles.dart';
 
 class CharacterDetails extends StatefulWidget {
@@ -183,10 +182,12 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                           child: BlocProvider.value(
                             value: character.listCharacterComicsCubit,
                             child: BlocBuilder<ListCharacterComicsCubit,
-                                ListCharacterComics>(
+                                ListCharacterComicsState>(
                               builder: (context, listCharacterComics) {
-                                if (listCharacterComics.isNull &&
-                                    listCharacterComics.isLoading) {
+                                if (listCharacterComics
+                                        is ListCharacterComicsInitial ||
+                                    listCharacterComics
+                                        is ListCharacterComicsLoading) {
                                   return Center(
                                     child: SpinKitCubeGrid(
                                       size: 30.sp,
@@ -194,19 +195,27 @@ class _CharacterDetailsState extends State<CharacterDetails> {
                                     ),
                                   );
                                 }
+                                if (listCharacterComics
+                                    is ListCharacterComicsError) {
+                                  return CustomErrorWidget(
+                                    error: listCharacterComics.error,
+                                    offset: 0.7,
+                                  );
+                                }
                                 return ListView.separated(
                                   controller: scrollController,
                                   scrollDirection: Axis.horizontal,
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 24.sp),
-                                  itemBuilder: (context, index) {
-                                    CharacterComic characterComic =
-                                        listCharacterComics.elementAt(index);
-                                    return CharacterComicTile(
-                                        characterComic: characterComic);
-                                  },
+                                  itemBuilder: (context, index) =>
+                                      CharacterComicTile(
+                                    characterComic:
+                                        listCharacterComics.elementAt(index),
+                                  ),
                                   separatorBuilder: (_, __) => 10.widthSp,
-                                  itemCount: listCharacterComics.length,
+                                  itemCount: (listCharacterComics
+                                          as ListCharacterComicsLoaded)
+                                      .length,
                                 );
                               },
                             ),

@@ -36,12 +36,25 @@ class ListCharactersCubit extends Cubit<ListCharactersState> {
   /// call get to retrieve data from backend.
   Future<void> get({
     required bool refresh,
-  }) {
-    return characterRepository.list(
-      listCharactersBookmarkedState: listCharactersBookmarkedState,
-      listCharacters: this,
-      refresh: refresh,
-    );
+  }) async {
+    try {
+      await characterRepository.list(
+        listCharactersBookmarkedState: listCharactersBookmarkedState,
+        listCharacters: this,
+        refresh: refresh,
+      );
+    } on BackendException catch (e) {
+      emit(ListCharactersError(e));
+    } catch (e) {
+      emit(
+        const ListCharactersError(
+          BackendException(
+            code: 'unknown_error',
+            statusCode: 0,
+          ),
+        ),
+      );
+    }
   }
 
   /// Get more data, uses pagination.
@@ -51,8 +64,6 @@ class ListCharactersCubit extends Cubit<ListCharactersState> {
       'state must be ListCharactersInitial',
     );
     if ((state as ListCharactersLoaded).isLoading) return;
-    // (state as ListCharactersLoaded).isLoading = true;
-    // emit(state as ListCharactersLoaded);
     var loadedState = (state as ListCharactersLoaded);
     emit(
       ListCharactersLoaded(
@@ -81,7 +92,6 @@ class ListCharactersCubit extends Cubit<ListCharactersState> {
   void update(
     Set<CharacterCubit> result,
     int total,
-    bool error,
     bool refresh,
   ) {
     if (state is! ListCharactersLoaded || refresh) {
@@ -111,14 +121,6 @@ class ListCharactersCubit extends Cubit<ListCharactersState> {
         limit: 10,
       ),
     );
-    // loadedState.totalPages = (total / loadedState.limit).round() + 1;
-    // loadedState.currentPage++;
-    // loadedState.set.addAll(result);
-    // loadedState.offset =
-    //     loadedState.offset + min(loadedState.limit, result.length);
-    // loadedState.isLoading = false;
-    // loadedState.total = total;
-    // emit(loadedState);
   }
 
   /// Reset list to its initial state.

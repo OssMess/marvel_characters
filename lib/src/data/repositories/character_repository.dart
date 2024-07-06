@@ -31,7 +31,6 @@ class CharacterRepository {
     listCharacters.update(
       list.toSet(),
       result['data']['total'],
-      false,
       refresh,
     );
   }
