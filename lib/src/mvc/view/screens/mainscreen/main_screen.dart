@@ -124,6 +124,9 @@ class _MainScreenState extends State<MainScreen> {
                                   value: context.read<UserCubit>(),
                                 ),
                                 BlocProvider.value(
+                                  value: context.read<ListCharactersCubit>(),
+                                ),
+                                BlocProvider.value(
                                   value: context
                                       .read<ListCharactersBookmarkedCubit>(),
                                 ),
@@ -176,8 +179,13 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   }
                   if (listCharacters is ListCharactersError) {
-                    return CustomErrorWidget(
-                      error: listCharacters.error,
+                    return SliverPadding(
+                      padding: EdgeInsets.only(top: 100.h),
+                      sliver: SliverToBoxAdapter(
+                        child: CustomErrorWidget(
+                          error: listCharacters.error,
+                        ),
+                      ),
                     );
                   }
                   if (listCharacters is ListCharactersLoaded) {
@@ -186,9 +194,14 @@ class _MainScreenState extends State<MainScreen> {
                       sliver: SliverList.separated(
                         itemBuilder: (context, index) {
                           if (index < listCharacters.length) {
+                            CharacterCubit character =
+                                listCharacters.elementAt(index);
                             return BlocProvider<CharacterCubit>.value(
-                              value: listCharacters.elementAt(index),
-                              child: const CharacterTile(),
+                              value: character,
+                              child: CharacterTile(
+                                key: ValueKey(
+                                    (character.state as CharacterLoaded).id),
+                              ),
                             );
                           }
                           return CustomTrailingTile(

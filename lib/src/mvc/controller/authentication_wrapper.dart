@@ -25,14 +25,16 @@ class AuthenticationWrapper extends StatefulWidget {
 }
 
 class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
-  ListCharactersBookmarkedState listCharactersBookmarkedState =
-      ListCharactersBookmarkedState();
+  late ListCharactersBookmarkedCubit listCharactersBookmarkedCubit;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!context.mounted) return;
+      listCharactersBookmarkedCubit =
+          ListCharactersBookmarkedCubit(ListCharactersBookmarkedInitial());
+      listCharactersBookmarkedCubit.init();
       Paddings.init(context);
     });
   }
@@ -62,15 +64,16 @@ class _AuthenticationWrapperState extends State<AuthenticationWrapper> {
         // Authenticated
         return MultiBlocProvider(
           providers: [
-            BlocProvider<ListCharactersBookmarkedCubit>(
-              lazy: false,
-              create: (context) =>
-                  ListCharactersBookmarkedCubit(listCharactersBookmarkedState)
-                    ..init(),
+            BlocProvider<ListCharactersBookmarkedCubit>.value(
+              value: listCharactersBookmarkedCubit,
+              // lazy: false,
+              // create: (context) =>
+              //     ListCharactersBookmarkedCubit(listCharactersBookmarkedCubit)
+              // ..init(),
             ),
             BlocProvider<ListCharactersCubit>(
               create: (context) =>
-                  ListCharactersCubit(listCharactersBookmarkedState)
+                  ListCharactersCubit(listCharactersBookmarkedCubit)
                     ..initData(callGet: true),
             ),
           ],

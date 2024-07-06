@@ -26,17 +26,27 @@ class CharacterCubit extends Cubit<CharacterState> {
         ),
       );
 
-  bool bookmark() {
+  bool bookmark([bool forceUnbookmark = false]) {
     assert(state is CharacterLoaded, 'character must be Character');
-    var loadedState = state as CharacterLoaded;
-    bool isBookmarked = !loadedState.isBookmarked;
-    emit(
-      CharacterLoaded.fromCharacterLoaded(
-        loadedState,
-        isBookmarked,
-      ),
-    );
-    return isBookmarked;
+    CharacterLoaded loadedState = state as CharacterLoaded;
+    if (forceUnbookmark) {
+      emit(
+        CharacterLoaded.fromCharacterLoaded(
+          loadedState,
+          false,
+        ),
+      );
+      return false;
+    } else {
+      bool isBookmarked = !loadedState.isBookmarked;
+      emit(
+        CharacterLoaded.fromCharacterLoaded(
+          loadedState,
+          isBookmarked,
+        ),
+      );
+      return isBookmarked;
+    }
   }
 
   Future<void> init(ScrollController scrollController) async {

@@ -46,9 +46,11 @@ class _CharacterDetailsState extends State<CharacterDetails> {
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-            onPressed: () => context
-                .read<ListCharactersBookmarkedCubit>()
-                .bookmark(context.read<CharacterCubit>()),
+            onPressed: () =>
+                context.read<ListCharactersBookmarkedCubit>().bookmark(
+                      context.read<CharacterCubit>(),
+                      context.read<ListCharactersCubit>(),
+                    ),
             icon: BlocBuilder<CharacterCubit, CharacterState>(
               builder: (context, state) {
                 return Icon(

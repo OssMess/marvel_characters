@@ -12,9 +12,9 @@ part 'list_characters_state.dart';
 
 class ListCharactersCubit extends Cubit<ListCharactersState> {
   final CharacterRepository characterRepository = CharacterRepository();
-  final ListCharactersBookmarkedState listCharactersBookmarkedState;
+  final ListCharactersBookmarkedCubit listCharactersBookmarkedCubit;
 
-  ListCharactersCubit(this.listCharactersBookmarkedState)
+  ListCharactersCubit(this.listCharactersBookmarkedCubit)
       : super(ListCharactersInitial());
 
   /// Init data.
@@ -39,7 +39,7 @@ class ListCharactersCubit extends Cubit<ListCharactersState> {
   }) async {
     try {
       await characterRepository.list(
-        listCharactersBookmarkedState: listCharactersBookmarkedState,
+        listCharactersBookmarkedCubit: listCharactersBookmarkedCubit,
         listCharacters: this,
         refresh: refresh,
       );

@@ -21,10 +21,8 @@ class ListCharacterComicsCubit extends Cubit<ListCharacterComicsState> {
   Future<void> initData({
     required bool callGet,
   }) async {
-    assert(
-      state is ListCharacterComicsInitial,
-      'state must be ListCharacterComicInitial',
-    );
+    if (state is ListCharacterComicsLoaded ||
+        state is ListCharacterComicsLoading) return;
     if (!callGet) return;
     emit(ListCharacterComicsLoading());
     await get(

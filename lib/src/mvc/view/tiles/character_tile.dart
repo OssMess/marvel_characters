@@ -11,7 +11,7 @@ import '../screens.dart';
 
 class CharacterTile extends StatelessWidget {
   const CharacterTile({
-    super.key,
+    required super.key,
   });
 
   @override
@@ -25,6 +25,9 @@ class CharacterTile extends StatelessWidget {
             ),
             BlocProvider.value(
               value: context.read<CharacterCubit>(),
+            ),
+            BlocProvider.value(
+              value: context.read<ListCharactersCubit>(),
             ),
             BlocProvider.value(
               value: context.read<ListCharactersBookmarkedCubit>(),

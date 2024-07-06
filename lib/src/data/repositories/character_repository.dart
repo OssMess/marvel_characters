@@ -5,7 +5,7 @@ class CharacterRepository {
   final CharacterProvider provider = CharacterProvider();
 
   Future<void> list({
-    required ListCharactersBookmarkedState listCharactersBookmarkedState,
+    required ListCharactersBookmarkedCubit listCharactersBookmarkedCubit,
     required ListCharactersCubit listCharacters,
     required bool refresh,
   }) async {
@@ -21,10 +21,15 @@ class CharacterRepository {
         .map(
           (e) => CharacterCubit.fromJson(
             e,
-            listCharactersBookmarkedState.list
-                .where((element) =>
-                    (element.state as CharacterLoaded).id == e['id'])
-                .isNotEmpty,
+            listCharactersBookmarkedCubit.state
+                    is! ListCharactersBookmarkedLoaded
+                ? false
+                : ((listCharactersBookmarkedCubit.state
+                        as ListCharactersBookmarkedLoaded)
+                    .set
+                    .where((element) =>
+                        (element.state as CharacterLoaded).id == e['id'])
+                    .isNotEmpty),
           ),
         )
         .toList();
@@ -34,24 +39,4 @@ class CharacterRepository {
       refresh,
     );
   }
-
-  //FIXME bookmark character
-  // Future<void> bookmarkCharacter(CharacterState character) async {
-  //   assert(character is CharacterLoaded, 'character must be Character');
-  //   if ((character as CharacterLoaded).isBookmarked) {
-  //     deleteBookmark(character);
-  //   } else {
-  //     addBookmark(character);
-  //   }
-  // }
-
-  // bool addBookmark(CharacterState character) {
-  //   assert(character is CharacterLoaded, 'character must be Character');
-  //   return true;
-  // }
-
-  // bool deleteBookmark(CharacterState character) {
-  //   assert(character is CharacterLoaded, 'character must be Character');
-  //   return false;
-  // }
 }
