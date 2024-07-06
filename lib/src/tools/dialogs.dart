@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../data/enums.dart';
 import '../data/models_ui.dart';
 import '../presentation/dialogs.dart';
-import '../mvc/view/model_widgets.dart';
+import '../presentation/model_widgets.dart';
 import '../tools.dart';
 
 class Dialogs {

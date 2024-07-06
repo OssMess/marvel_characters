@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/data_providers.dart';
 import '../../../data/enums.dart';
-import '../../../mvc/controller/services.dart';
 import '../../../tools/datetime_utils.dart';
 
 part 'user_state.dart';

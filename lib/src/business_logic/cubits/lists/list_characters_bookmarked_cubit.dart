@@ -70,6 +70,7 @@ class ListCharactersBookmarkedCubit
                       (character as CharacterLoaded).id,
                 );
         characterCubit.bookmark(true);
+        // ignore: empty_catches
       } catch (e) {}
       Box box = await Hive.openBox(boxName);
       await box.delete((character.state as CharacterLoaded).id);

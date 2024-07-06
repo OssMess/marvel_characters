@@ -6,7 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'business_logic/cubits.dart';
-import 'mvc/controller/authentication_wrapper.dart';
+import 'presentation/authentication_wrapper.dart';
 import 'settings/settings_controller.dart';
 import 'tools/styles.dart';
 
