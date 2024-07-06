@@ -18,7 +18,7 @@ class UserRepository {
     await _firestore.doc(FirestorePath.userSession(uid: uid)).update(data);
   }
 
-  static Future<void> create(UserSession userSession) async {
+  static Future<void> create(UserLoaded userSession) async {
     await _firestore.doc(FirestorePath.userSession(uid: userSession.uid)).set(
           userSession.toInitMap,
         );

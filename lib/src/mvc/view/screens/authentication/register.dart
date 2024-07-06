@@ -191,7 +191,7 @@ class _RegisterState extends State<Register> {
         email: email!,
         password: password!,
       ),
-      onComplete: (_) => BlocProvider.of<UserCubit>(context).emitUserLoading(),
+      onComplete: (_) => context.read<UserCubit>().emitUserLoading(),
       onError: (e) {
         setState(() {
           emailError = Functions.of(context).translateException(e);

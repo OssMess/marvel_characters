@@ -15,8 +15,8 @@ class UserCubit extends Cubit<UserState> {
 
   Future<void> signOut() async {
     assert(
-        state is UserSession, 'UserState must be UserSession to call signOut.');
-    await (state as UserSession).signOut();
+        state is UserLoaded, 'UserState must be UserSession to call signOut.');
+    await (state as UserLoaded).signOut();
     // can not emit a new state after this cubit is closed in the authwrapper
     // once signed out (no longer needed in the widget tree)
     // emit(const UserUnAuthenticated());
@@ -34,9 +34,7 @@ class UserCubit extends Cubit<UserState> {
           // user is connected
           try {
             emit(
-              await FirebaseAuthenticationRepository.userFromFirebaseUser(
-                user,
-              ),
+              await FirebaseAuthenticationRepository.userFromFirebaseUser(user),
             );
           } on Exception catch (e) {
             // an error has occured

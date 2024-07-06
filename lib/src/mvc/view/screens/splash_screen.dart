@@ -98,7 +98,7 @@ class SplashScreen extends StatelessWidget {
                 CustomTextButton(
                   button: ModelTextButton(
                     label: AppLocalizations.of(context)!.logout,
-                    onPressed: BlocProvider.of<UserCubit>(context).signOut,
+                    onPressed: context.read<UserCubit>().signOut,
                     color: context.primaryColor,
                   ),
                 ),

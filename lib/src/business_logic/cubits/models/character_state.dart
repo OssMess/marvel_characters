@@ -17,7 +17,7 @@ class CharacterError extends CharacterState {
 }
 
 // ignore: must_be_immutable
-class Character extends CharacterState {
+class CharacterLoaded extends CharacterState {
   final int id;
   final String name;
   final String description;
@@ -30,10 +30,27 @@ class Character extends CharacterState {
   final Stories stories;
   final Comics events;
   final Comics series;
-  bool isBookmarked;
+  final bool isBookmarked;
   final ListCharacterComicsCubit listCharacterComicsCubit;
 
-  Character({
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        modified,
+        resourceUri,
+        urls,
+        photo,
+        thumbnail,
+        comics,
+        stories,
+        events,
+        series,
+        isBookmarked,
+      ];
+
+  const CharacterLoaded({
     required this.id,
     required this.name,
     required this.description,
@@ -50,11 +67,32 @@ class Character extends CharacterState {
     required this.listCharacterComicsCubit,
   });
 
-  factory Character.fromJson(
+  factory CharacterLoaded.fromCharacterLoaded(
+    CharacterLoaded characterLoaded, [
+    bool? isBookmarked,
+  ]) =>
+      CharacterLoaded(
+        id: characterLoaded.id,
+        name: characterLoaded.name,
+        description: characterLoaded.description,
+        modified: characterLoaded.modified,
+        resourceUri: characterLoaded.resourceUri,
+        urls: characterLoaded.urls,
+        photo: characterLoaded.photo,
+        thumbnail: characterLoaded.thumbnail,
+        comics: characterLoaded.comics,
+        stories: characterLoaded.stories,
+        events: characterLoaded.events,
+        series: characterLoaded.series,
+        isBookmarked: isBookmarked ?? characterLoaded.isBookmarked,
+        listCharacterComicsCubit: characterLoaded.listCharacterComicsCubit,
+      );
+
+  factory CharacterLoaded.fromJson(
     Map<dynamic, dynamic> json,
     bool isBookmarked,
   ) =>
-      Character(
+      CharacterLoaded(
         id: json['id'],
         name: json['name'],
         description: json['description'],

@@ -20,22 +20,31 @@ class CharacterCubit extends Cubit<CharacterState> {
     bool isBookmarked,
   ) =>
       CharacterCubit(
-        Character.fromJson(
+        CharacterLoaded.fromJson(
           json,
           isBookmarked,
         ),
       );
 
   bool bookmark() {
-    repository.bookmarkCharacter(state);
-    emit(state);
-    return (state as Character).isBookmarked;
+    assert(state is CharacterLoaded, 'character must be Character');
+    var loadedState = state as CharacterLoaded;
+    bool isBookmarked = !loadedState.isBookmarked;
+    emit(
+      CharacterLoaded.fromCharacterLoaded(
+        loadedState,
+        isBookmarked,
+      ),
+    );
+    return isBookmarked;
   }
 
   Future<void> init(ScrollController scrollController) async {
-    (state as Character)
+    (state as CharacterLoaded)
         .listCharacterComicsCubit
         .addControllerListener(scrollController);
-    await (state as Character).listCharacterComicsCubit.initData(callGet: true);
+    await (state as CharacterLoaded)
+        .listCharacterComicsCubit
+        .initData(callGet: true);
   }
 }

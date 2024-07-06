@@ -19,12 +19,12 @@ class FirebaseAuthenticationRepository {
   }
 
   ///build a UserFirebaseSession object for current [user]
-  static Future<UserSession> userFromFirebaseUser(
+  static Future<UserLoaded> userFromFirebaseUser(
     User user, [
     int retry = 5,
   ]) async {
     try {
-      late UserSession userSession;
+      late UserLoaded userSession;
       if (retry <= 0) {
         throw FirebaseAuthException(
           code: 'time-out',
@@ -63,7 +63,7 @@ class FirebaseAuthenticationRepository {
         if (doc.data()!['uid'] != user.uid) {
           throw FirebaseAuthException(code: 'user-not-match');
         }
-        return UserSession.fromFirebaseUserDoc(
+        return UserLoaded.fromFirebaseUserDoc(
           user: user,
           doc: doc,
         );
@@ -124,7 +124,7 @@ class FirebaseAuthenticationRepository {
       );
     } catch (e) {
       await UserRepository.create(
-        UserSession.fromUser(
+        UserLoaded.fromUser(
           user: user,
           token: token,
         ),

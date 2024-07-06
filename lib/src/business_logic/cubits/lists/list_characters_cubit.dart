@@ -2,27 +2,32 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-import '../../../data/list_models.dart';
+import '../../../data/models.dart';
 import '../../../data/repositories.dart';
 import '../../cubits.dart';
 
-class ListCharactersCubit extends Cubit<ListCharacters> {
+part 'list_characters_state.dart';
+
+class ListCharactersCubit extends Cubit<ListCharactersState> {
   final CharacterRepository characterRepository = CharacterRepository();
   final ListCharactersBookmarkedState listCharactersBookmarkedState;
 
   ListCharactersCubit(this.listCharactersBookmarkedState)
-      : super(ListCharacters());
+      : super(ListCharactersInitial());
 
   /// Init data.
   /// if [callGet] is `true` proceed with query, else break.
   Future<void> initData({
     required bool callGet,
   }) async {
+    assert(
+      state is ListCharactersInitial,
+      'state must be ListCharactersInitial',
+    );
     if (!callGet) return;
-    if (!state.isNull) return;
-    if (state.isLoading) return;
-    state.isLoading = true;
+    emit(ListCharactersLoading());
     await get(
       refresh: false,
     );
@@ -41,24 +46,32 @@ class ListCharactersCubit extends Cubit<ListCharacters> {
 
   /// Get more data, uses pagination.
   Future<void> getMore() async {
-    if (state.isNull) return;
-    if (state.isLoading) return;
-    state.isLoading = true;
-    emit(state);
-    await get(
-      refresh: false,
+    assert(
+      state is ListCharactersLoaded,
+      'state must be ListCharactersInitial',
     );
+    if ((state as ListCharactersLoaded).isLoading) return;
+    // (state as ListCharactersLoaded).isLoading = true;
+    // emit(state as ListCharactersLoaded);
+    var loadedState = (state as ListCharactersLoaded);
+    emit(
+      ListCharactersLoaded(
+        currentPage: loadedState.currentPage,
+        totalPages: loadedState.totalPages,
+        set: loadedState.set,
+        offset: loadedState.offset,
+        total: loadedState.total,
+        isLoading: true,
+        limit: 10,
+      ),
+    );
+    await get(refresh: false);
   }
 
   /// Refresh data.
   Future<void> refresh() async {
-    if (state.isLoading) return;
-    state.total = 0;
-    state.offset = 0;
-    state.totalPages = -1;
-    state.currentPage = 0;
-    state.hasError = false;
-    state.isLoading = true;
+    if (state is ListCharactersLoading) return;
+    emit(ListCharactersLoading());
     await get(
       refresh: true,
     );
@@ -66,53 +79,58 @@ class ListCharactersCubit extends Cubit<ListCharacters> {
 
   /// Update list with query result, and notify listeners
   void update(
-    Set<CharacterState> result,
+    Set<CharacterCubit> result,
     int total,
     bool error,
     bool refresh,
   ) {
-    if (error || refresh) {
-      state.list.clear();
+    if (state is! ListCharactersLoaded || refresh) {
+      emit(
+        ListCharactersLoaded(
+          currentPage: 1,
+          totalPages: (total / 10).round() + 1,
+          isLoading: false,
+          set: result,
+          offset: min(10, result.length),
+          total: total,
+          limit: 10,
+        ),
+      );
+      return;
     }
-    if (!error) {
-      state.total = total;
-      state.offset = state.offset + min(state.limit, result.length);
-      state.totalPages = (total / state.limit).round() + 1;
-      state.currentPage++;
-      state.list.addAll(result);
-    }
-    state.isLoading = false;
-    state.isNull = false;
-    state.hasError = error;
-    emit(state);
+    assert(state is ListCharactersLoaded, 'state must be ListCharactersLoaded');
+    var loadedState = (state as ListCharactersLoaded);
+    emit(
+      ListCharactersLoaded(
+        currentPage: loadedState.currentPage + 1,
+        totalPages: (total / loadedState.limit).round() + 1,
+        set: {...loadedState.set, ...result},
+        offset: loadedState.offset + min(loadedState.limit, result.length),
+        total: total,
+        isLoading: false,
+        limit: 10,
+      ),
+    );
+    // loadedState.totalPages = (total / loadedState.limit).round() + 1;
+    // loadedState.currentPage++;
+    // loadedState.set.addAll(result);
+    // loadedState.offset =
+    //     loadedState.offset + min(loadedState.limit, result.length);
+    // loadedState.isLoading = false;
+    // loadedState.total = total;
+    // emit(loadedState);
   }
 
   /// Reset list to its initial state.
   void reset() {
-    state.isNull = true;
-    state.isLoading = false;
-    state.hasError = false;
-    state.list.clear();
-    state.totalPages = -1;
-    state.currentPage = 0;
-  }
-
-  /// Clone the values of all attributs of [update] to `this` and refresh the UI.
-  /// The aim here is to update to `this` and keep all widgets attached to `this` notifiable.
-  void updateFrom(ListCharacters update) {
-    state.list = update.list;
-    state.isNull = update.isNull;
-    state.isLoading = update.isLoading;
-    state.totalPages = update.totalPages;
-    state.currentPage = update.currentPage;
-    state.hasError = update.hasError;
-    emit(state);
+    emit(ListCharactersInitial());
   }
 
   ///For lazzy loading, Use [scrollNotification] to detect if the scroll has reached the end of the
   ///page, and if the list has more data, call `getMore`.
   bool onMaxScrollExtent(ScrollNotification scrollNotification) {
-    if (!state.canGetMore) return true;
+    if (state is! ListCharactersLoaded) return true;
+    if (!(state as ListCharactersLoaded).canGetMore) return true;
     if (scrollNotification.metrics.pixels !=
         scrollNotification.metrics.maxScrollExtent) {
       return true;
@@ -128,7 +146,8 @@ class ListCharactersCubit extends Cubit<ListCharacters> {
     ScrollNotification scrollNotification,
     double extentAfter,
   ) {
-    if (!state.canGetMore) return true;
+    if (state is! ListCharactersLoaded) return true;
+    if (!(state as ListCharactersLoaded).canGetMore) return true;
     if (scrollNotification.metrics.extentAfter < extentAfter) {
       return true;
     }
@@ -140,9 +159,8 @@ class ListCharactersCubit extends Cubit<ListCharacters> {
   /// if there are any.
   void addControllerListener(ScrollController controller) {
     controller.addListener(() {
-      if (state.isNull) return;
-      if (state.isLoading) return;
-      if (!state.canGetMore) return;
+      if (state is! ListCharactersLoaded) return;
+      if (!(state as ListCharactersLoaded).canGetMore) return;
       if (controller.position.maxScrollExtent != controller.offset) return;
       getMore();
     });

@@ -27,7 +27,7 @@ class _CharacterDetailsState extends State<CharacterDetails> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!context.mounted) return;
-      BlocProvider.of<CharacterCubit>(context).init(scrollController);
+      context.read<CharacterCubit>().init(scrollController);
     });
     super.initState();
   }
@@ -47,15 +47,13 @@ class _CharacterDetailsState extends State<CharacterDetails> {
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
-            onPressed: () =>
-                BlocProvider.of<ListCharactersBookmarkedCubit>(context)
-                    .bookmark(
-              BlocProvider.of<CharacterCubit>(context),
-            ),
+            onPressed: () => context
+                .read<ListCharactersBookmarkedCubit>()
+                .bookmark(context.read<CharacterCubit>()),
             icon: BlocBuilder<CharacterCubit, CharacterState>(
               builder: (context, state) {
                 return Icon(
-                  (state as Character).isBookmarked
+                  (state as CharacterLoaded).isBookmarked
                       ? AwesomeIconsSolid.heart
                       : AwesomeIconsRegular.heart,
                 );
@@ -65,8 +63,8 @@ class _CharacterDetailsState extends State<CharacterDetails> {
         ],
       ),
       body: Builder(builder: (context) {
-        Character character =
-            BlocProvider.of<CharacterCubit>(context).state as Character;
+        CharacterLoaded character =
+            context.read<CharacterCubit>().state as CharacterLoaded;
         return SingleChildScrollView(
           child: Column(
             children: [

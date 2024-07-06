@@ -117,7 +117,7 @@ class _SigninState extends State<Signin> {
         email: email!,
         password: password!,
       ),
-      onComplete: (_) => BlocProvider.of<UserCubit>(context).emitUserLoading(),
+      onComplete: (_) => context.read<UserCubit>().emitUserLoading(),
       onError: (e) {
         try {
           throw e;

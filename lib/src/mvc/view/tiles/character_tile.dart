@@ -21,13 +21,13 @@ class CharacterTile extends StatelessWidget {
         widget: MultiBlocProvider(
           providers: [
             BlocProvider.value(
-              value: BlocProvider.of<UserCubit>(context),
+              value: context.read<UserCubit>(),
             ),
             BlocProvider.value(
-              value: BlocProvider.of<CharacterCubit>(context),
+              value: context.read<CharacterCubit>(),
             ),
             BlocProvider.value(
-              value: BlocProvider.of<ListCharactersBookmarkedCubit>(context),
+              value: context.read<ListCharactersBookmarkedCubit>(),
             ),
           ],
           child: const CharacterDetails(),
@@ -35,7 +35,7 @@ class CharacterTile extends StatelessWidget {
       ),
       child: BlocBuilder<CharacterCubit, CharacterState>(
         builder: (context, state) {
-          state as Character;
+          state as CharacterLoaded;
           return Row(
             children: [
               SizedBox(

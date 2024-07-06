@@ -10,15 +10,20 @@ class CharacterRepository {
     required bool refresh,
   }) async {
     Map<String, dynamic> result = await provider.list(
-      offset: listCharacters.state.offset,
-      limit: listCharacters.state.limit,
+      offset: listCharacters.state is ListCharactersLoaded
+          ? (listCharacters.state as ListCharactersLoaded).offset
+          : 0,
+      limit: listCharacters.state is ListCharactersLoaded
+          ? (listCharacters.state as ListCharactersLoaded).limit
+          : 10,
     );
-    List<CharacterState> list = List.from(result['data']['results'])
+    List<CharacterCubit> list = List.from(result['data']['results'])
         .map(
-          (e) => Character.fromJson(
+          (e) => CharacterCubit.fromJson(
             e,
             listCharactersBookmarkedState.list
-                .where((element) => (element.state as Character).id == e['id'])
+                .where((element) =>
+                    (element.state as CharacterLoaded).id == e['id'])
                 .isNotEmpty,
           ),
         )
@@ -31,24 +36,23 @@ class CharacterRepository {
     );
   }
 
-  Future<void> bookmarkCharacter(CharacterState character) async {
-    assert(character is Character, 'character must be Character');
-    if ((character as Character).isBookmarked) {
-      deleteBookmark(character);
-    } else {
-      addBookmark(character);
-    }
-  }
+  //FIXME bookmark character
+  // Future<void> bookmarkCharacter(CharacterState character) async {
+  //   assert(character is CharacterLoaded, 'character must be Character');
+  //   if ((character as CharacterLoaded).isBookmarked) {
+  //     deleteBookmark(character);
+  //   } else {
+  //     addBookmark(character);
+  //   }
+  // }
 
-  void addBookmark(
-    CharacterState character,
-  ) {
-    assert(character is Character, 'character must be Character');
-    (character as Character).isBookmarked = true;
-  }
+  // bool addBookmark(CharacterState character) {
+  //   assert(character is CharacterLoaded, 'character must be Character');
+  //   return true;
+  // }
 
-  void deleteBookmark(CharacterState character) {
-    assert(character is Character, 'character must be Character');
-    (character as Character).isBookmarked = false;
-  }
+  // bool deleteBookmark(CharacterState character) {
+  //   assert(character is CharacterLoaded, 'character must be Character');
+  //   return false;
+  // }
 }

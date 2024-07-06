@@ -12,7 +12,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../../main.dart';
 import '../../../../business_logic/cubits.dart';
-import '../../../../data/list_models.dart';
 import '../../../../settings/settings_controller.dart';
 import '../../../../tools.dart';
 import '../../../../data/enums.dart';
@@ -86,12 +85,11 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
-      onNotification:
-          BlocProvider.of<ListCharactersCubit>(context).onMaxScrollExtent,
+      onNotification: context.read<ListCharactersCubit>().onMaxScrollExtent,
       child: Scaffold(
         key: _scaffoldKey,
         body: RefreshIndicator(
-          onRefresh: BlocProvider.of<ListCharactersCubit>(context).refresh,
+          onRefresh: context.read<ListCharactersCubit>().refresh,
           color: context.primary,
           backgroundColor: context.primaryColor.shade50,
           displacement: context.viewPadding.top + 56,
@@ -123,11 +121,11 @@ class _MainScreenState extends State<MainScreen> {
                             widget: MultiBlocProvider(
                               providers: [
                                 BlocProvider.value(
-                                  value: BlocProvider.of<UserCubit>(context),
+                                  value: context.read<UserCubit>(),
                                 ),
                                 BlocProvider.value(
-                                  value: BlocProvider.of<
-                                      ListCharactersBookmarkedCubit>(context),
+                                  value: context
+                                      .read<ListCharactersBookmarkedCubit>(),
                                 ),
                               ],
                               child: const FavoriteCharacters(),
@@ -147,8 +145,7 @@ class _MainScreenState extends State<MainScreen> {
                                 AppLocalizations.of(context)!.signout_hint,
                             onContinue: () =>
                                 Dialogs.of(context).runAsyncAction(
-                              future:
-                                  BlocProvider.of<UserCubit>(context).signOut,
+                              future: context.read<UserCubit>().signOut,
                             ),
                             continueLabel:
                                 AppLocalizations.of(context)!.signout,
@@ -164,9 +161,13 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
               ),
-              BlocBuilder<ListCharactersCubit, ListCharacters>(
+              BlocBuilder<ListCharactersCubit, ListCharactersState>(
+                buildWhen: (previous, current) {
+                  return true;
+                },
                 builder: (context, listCharacters) {
-                  if (listCharacters.isNull && listCharacters.isLoading) {
+                  if (listCharacters is ListCharactersInitial ||
+                      listCharacters is ListCharactersLoading) {
                     return SliverPadding(
                       padding: EdgeInsets.only(top: 200.h),
                       sliver: SliverToBoxAdapter(
@@ -177,32 +178,36 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     );
                   }
-                  return SliverPadding(
-                    padding: EdgeInsets.all(24.sp),
-                    sliver: SliverList.separated(
-                      itemBuilder: (context, index) {
-                        if (index < listCharacters.length) {
-                          return BlocProvider<CharacterCubit>.value(
-                            value: CharacterCubit(
-                              BlocProvider.of<ListCharactersCubit>(context)
-                                  .state
-                                  .elementAt(index),
-                            ),
-                            child: const CharacterTile(),
+                  if (listCharacters is ListCharactersError) {
+                    return CustomErrorWidget(
+                      error: listCharacters.error,
+                    );
+                  }
+                  if (listCharacters is ListCharactersLoaded) {
+                    return SliverPadding(
+                      padding: EdgeInsets.all(24.sp),
+                      sliver: SliverList.separated(
+                        itemBuilder: (context, index) {
+                          if (index < listCharacters.length) {
+                            return BlocProvider<CharacterCubit>.value(
+                              value: listCharacters.elementAt(index),
+                              child: const CharacterTile(),
+                            );
+                          }
+                          return CustomTrailingTile(
+                            hasMore: listCharacters.hasMore,
+                            isLoading: listCharacters.isLoading,
+                            isNotNull: true,
+                            isSliver: false,
                           );
-                        }
-                        return CustomTrailingTile(
-                          hasMore: listCharacters.hasMore,
-                          isLoading: listCharacters.isLoading,
-                          isNotNull: listCharacters.isNotNull,
-                          isSliver: false,
-                        );
-                      },
-                      separatorBuilder: (_, __) => 30.height,
-                      itemCount: listCharacters.length +
-                          (listCharacters.hasMore ? 1 : 0),
-                    ),
-                  );
+                        },
+                        separatorBuilder: (_, __) => 30.height,
+                        itemCount: listCharacters.length +
+                            (listCharacters.hasMore ? 1 : 0),
+                      ),
+                    );
+                  }
+                  throw UnimplementedError();
                 },
               ),
             ],

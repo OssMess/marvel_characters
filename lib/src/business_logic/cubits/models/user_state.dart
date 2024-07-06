@@ -20,7 +20,7 @@ final class UserUnAuthenticated extends UserState {
   List<Object?> get props => [error];
 }
 
-final class UserSession extends UserState {
+final class UserLoaded extends UserState {
   /// user authentication sate
   final AuthState authState;
 
@@ -31,7 +31,7 @@ final class UserSession extends UserState {
   final DateTime updatedAt;
   final DateTime createdAt;
 
-  const UserSession({
+  const UserLoaded({
     required this.authState,
     required this.uid,
     required this.token,
@@ -41,12 +41,12 @@ final class UserSession extends UserState {
   });
 
   ///Use to build an instance of `UserSession` from [user] and [doc]
-  factory UserSession.fromFirebaseUserDoc({
+  factory UserLoaded.fromFirebaseUserDoc({
     required User user,
     required DocumentSnapshot<Map<String, dynamic>> doc,
   }) {
     Map<String, dynamic> json = doc.data()!;
-    return UserSession(
+    return UserLoaded(
       authState: AuthState.authenticated,
       uid: user.uid,
       email: user.email ?? json['email'],
@@ -57,11 +57,11 @@ final class UserSession extends UserState {
   }
 
   ///Use to build an instance of `UserSession` from [user] and also using [token].
-  factory UserSession.fromUser({
+  factory UserLoaded.fromUser({
     required User user,
     required String? token,
   }) {
-    return UserSession(
+    return UserLoaded(
       authState: AuthState.authenticated,
       uid: user.uid,
       token: token,
@@ -73,11 +73,11 @@ final class UserSession extends UserState {
 
   ///Call after user signup to build a instance of user `profile`, that will be
   ///pushed later by calling `toInitMap` method.
-  factory UserSession.fromUserCredential({
+  factory UserLoaded.fromUserCredential({
     required UserCredential userCredential,
     required String? token,
   }) {
-    return UserSession(
+    return UserLoaded(
       authState: AuthState.authenticated,
       uid: userCredential.user!.uid,
       token: token,
