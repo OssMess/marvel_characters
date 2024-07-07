@@ -10,16 +10,19 @@ class ComicRepository {
     required bool refresh,
   }) async {
     Map<String, dynamic> result = await provider.listComics(
-      offset: listComics.state.offset,
-      limit: listComics.state.limit,
+      offset: listComics.state is ListComicsLoaded
+          ? (listComics.state as ListComicsLoaded).offset
+          : 0,
+      limit: listComics.state is ListComicsLoaded
+          ? (listComics.state as ListComicsLoaded).limit
+          : 10,
     );
-    List<Comic> list = List.from(result['data']['results'])
-        .map((e) => Comic.fromJson(e))
+    List<ComicCubit> list = List.from(result['data']['results'])
+        .map((e) => ComicCubit.fromJson(e))
         .toList();
     listComics.update(
       list.toSet(),
       result['data']['total'],
-      false,
       refresh,
     );
   }

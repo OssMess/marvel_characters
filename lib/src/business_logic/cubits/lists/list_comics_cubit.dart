@@ -2,25 +2,30 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-import '../../../data/list_models.dart';
 import '../../../data/models.dart';
 import '../../../data/repositories.dart';
+import '../../cubits.dart';
 
-class ListComicsCubit extends Cubit<ListComics> {
+part 'list_comics_state.dart';
+
+class ListComicsCubit extends Cubit<ListComicsState> {
   final ComicRepository comicRepository = ComicRepository();
 
-  ListComicsCubit() : super(ListComics());
+  ListComicsCubit() : super(ListComicsInitial());
 
   /// Init data.
   /// if [callGet] is `true` proceed with query, else break.
   Future<void> initData({
     required bool callGet,
   }) async {
+    assert(
+      state is ListComicsInitial,
+      'state must be ListComicsInitial',
+    );
     if (!callGet) return;
-    if (!state.isNull) return;
-    if (state.isLoading) return;
-    state.isLoading = true;
+    emit(ListComicsLoading());
     await get(
       refresh: false,
     );
@@ -29,33 +34,52 @@ class ListComicsCubit extends Cubit<ListComics> {
   /// call get to retrieve data from backend.
   Future<void> get({
     required bool refresh,
-  }) {
-    return comicRepository.list(
-      listComics: this,
-      refresh: refresh,
-    );
+  }) async {
+    try {
+      await comicRepository.list(
+        listComics: this,
+        refresh: refresh,
+      );
+    } on BackendException catch (e) {
+      emit(ListComicsError(e));
+    } catch (e) {
+      emit(
+        const ListComicsError(
+          BackendException(
+            code: 'unknown_error',
+            statusCode: 0,
+          ),
+        ),
+      );
+    }
   }
 
   /// Get more data, uses pagination.
   Future<void> getMore() async {
-    if (state.isNull) return;
-    if (state.isLoading) return;
-    state.isLoading = true;
-    emit(state);
-    await get(
-      refresh: false,
+    assert(
+      state is ListComicsLoaded,
+      'state must be ListComicsInitial',
     );
+    if ((state as ListComicsLoaded).isLoading) return;
+    var loadedState = (state as ListComicsLoaded);
+    emit(
+      ListComicsLoaded(
+        currentPage: loadedState.currentPage,
+        totalPages: loadedState.totalPages,
+        set: loadedState.set,
+        offset: loadedState.offset,
+        total: loadedState.total,
+        isLoading: true,
+        limit: 10,
+      ),
+    );
+    await get(refresh: false);
   }
 
   /// Refresh data.
   Future<void> refresh() async {
-    if (state.isLoading) return;
-    state.total = 0;
-    state.offset = 0;
-    state.totalPages = -1;
-    state.currentPage = 0;
-    state.hasError = false;
-    state.isLoading = true;
+    if (state is ListComicsLoading) return;
+    emit(ListComicsLoading());
     await get(
       refresh: true,
     );
@@ -63,53 +87,49 @@ class ListComicsCubit extends Cubit<ListComics> {
 
   /// Update list with query result, and notify listeners
   void update(
-    Set<Comic> result,
+    Set<ComicCubit> result,
     int total,
-    bool error,
     bool refresh,
   ) {
-    if (error || refresh) {
-      state.list.clear();
+    if (state is! ListComicsLoaded || refresh) {
+      emit(
+        ListComicsLoaded(
+          currentPage: 1,
+          totalPages: (total / 10).round() + 1,
+          isLoading: false,
+          set: result,
+          offset: min(10, result.length),
+          total: total,
+          limit: 10,
+        ),
+      );
+      return;
     }
-    if (!error) {
-      state.total = total;
-      state.offset = state.offset + min(state.limit, result.length);
-      state.totalPages = (total / state.limit).round() + 1;
-      state.currentPage++;
-      state.list.addAll(result);
-    }
-    state.isLoading = false;
-    state.isNull = false;
-    state.hasError = error;
-    emit(state);
+    assert(state is ListComicsLoaded, 'state must be ListComicsLoaded');
+    var loadedState = (state as ListComicsLoaded);
+    emit(
+      ListComicsLoaded(
+        currentPage: loadedState.currentPage + 1,
+        totalPages: (total / loadedState.limit).round() + 1,
+        set: {...loadedState.set, ...result},
+        offset: loadedState.offset + min(loadedState.limit, result.length),
+        total: total,
+        isLoading: false,
+        limit: 10,
+      ),
+    );
   }
 
   /// Reset list to its initial state.
   void reset() {
-    state.isNull = true;
-    state.isLoading = false;
-    state.hasError = false;
-    state.list.clear();
-    state.totalPages = -1;
-    state.currentPage = 0;
-  }
-
-  /// Clone the values of all attributs of [update] to `this` and refresh the UI.
-  /// The aim here is to update to `this` and keep all widgets attached to `this` notifiable.
-  void updateFrom(ListComics update) {
-    state.list = update.list;
-    state.isNull = update.isNull;
-    state.isLoading = update.isLoading;
-    state.totalPages = update.totalPages;
-    state.currentPage = update.currentPage;
-    state.hasError = update.hasError;
-    emit(state);
+    emit(ListComicsInitial());
   }
 
   ///For lazzy loading, Use [scrollNotification] to detect if the scroll has reached the end of the
   ///page, and if the list has more data, call `getMore`.
   bool onMaxScrollExtent(ScrollNotification scrollNotification) {
-    if (!state.canGetMore) return true;
+    if (state is! ListComicsLoaded) return true;
+    if (!(state as ListComicsLoaded).canGetMore) return true;
     if (scrollNotification.metrics.pixels !=
         scrollNotification.metrics.maxScrollExtent) {
       return true;
@@ -125,7 +145,8 @@ class ListComicsCubit extends Cubit<ListComics> {
     ScrollNotification scrollNotification,
     double extentAfter,
   ) {
-    if (!state.canGetMore) return true;
+    if (state is! ListComicsLoaded) return true;
+    if (!(state as ListComicsLoaded).canGetMore) return true;
     if (scrollNotification.metrics.extentAfter < extentAfter) {
       return true;
     }
@@ -137,9 +158,8 @@ class ListComicsCubit extends Cubit<ListComics> {
   /// if there are any.
   void addControllerListener(ScrollController controller) {
     controller.addListener(() {
-      if (state.isNull) return;
-      if (state.isLoading) return;
-      if (!state.canGetMore) return;
+      if (state is! ListComicsLoaded) return;
+      if (!(state as ListComicsLoaded).canGetMore) return;
       if (controller.position.maxScrollExtent != controller.offset) return;
       getMore();
     });

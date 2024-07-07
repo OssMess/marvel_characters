@@ -1,6 +1,5 @@
 part of 'character_cubit.dart';
 
-// ignore: must_be_immutable
 class CharacterState extends Equatable {
   const CharacterState();
 
@@ -16,7 +15,6 @@ class CharacterError extends CharacterState {
   const CharacterError();
 }
 
-// ignore: must_be_immutable
 class CharacterLoaded extends CharacterState {
   final int id;
   final String name;

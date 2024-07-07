@@ -1,7 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models.dart';
 
-class ComicCubit extends Cubit<Comic> {
-  ComicCubit(Map<dynamic, dynamic> json) : super(Comic.fromJson(json));
+part 'comic_state.dart';
+
+class ComicCubit extends Cubit<ComicState> {
+  ComicCubit(ComicState comicState) : super(comicState);
+
+  factory ComicCubit.fromJson(Map<String, dynamic> json) => ComicCubit(
+        ComicLoaded.fromJson(json),
+      );
 }
