@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import '../../business_logic/cubits.dart';
-import '../../tools.dart';
-import '../screens.dart';
+import '../../business_logic/_cubits.dart';
+import '../../_tools.dart';
+import '../_screens.dart';
 
 class CharacterTile extends StatelessWidget {
   const CharacterTile({

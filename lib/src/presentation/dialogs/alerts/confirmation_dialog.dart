@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:marvel_characters/src/tools.dart';
+import 'package:marvel_characters/src/_tools.dart';
 
-import '../../../data/enums.dart';
-import '../../../data/models_ui.dart';
-import '../../dialogs.dart';
+import '../../../data/_enums.dart';
+import '../../../data/_models_ui.dart';
+import '../../_dialogs.dart';
 
 /// An `AdaptiveBottomSheet` as an alert dialog with a title, subtitle, icon,
 /// and two buttons, used to confirm simple actions, or to inform the user about

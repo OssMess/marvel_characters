@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../settings/settings_controller.dart';
-import '../../../data/enums.dart';
-import '../../screens.dart';
+import '../../../data/_enums.dart';
+import '../../_screens.dart';
 
 class AuthenticationRouter extends StatefulWidget {
   const AuthenticationRouter({

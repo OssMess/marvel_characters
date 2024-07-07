@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:badges/badges.dart' as badge;
 
-import '../../data/models.dart';
-import '../../tools.dart';
+import '../../data/_models.dart';
+import '../../_tools.dart';
 
 class CustomErrorWidget extends StatelessWidget {
   const CustomErrorWidget({

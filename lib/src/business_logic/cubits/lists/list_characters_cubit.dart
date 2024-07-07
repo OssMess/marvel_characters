@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models.dart';
-import '../../../data/repositories.dart';
-import '../../cubits.dart';
+import '../../../data/_models.dart';
+import '../../../data/_repositories.dart';
+import '../../_cubits.dart';
 
 part 'list_characters_state.dart';
 

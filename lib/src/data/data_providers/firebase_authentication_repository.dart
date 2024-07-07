@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import '../../business_logic/cubits.dart';
-import '../data_providers.dart';
+import '../../business_logic/_cubits.dart';
+import '../_data_providers.dart';
 
 class FirebaseAuthenticationRepository {
   static final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -1,5 +1,5 @@
-import '../../business_logic/cubits.dart';
-import '../data_providers.dart';
+import '../../business_logic/_cubits.dart';
+import '../_data_providers.dart';
 
 class CharacterRepository {
   final CharacterProvider provider = CharacterProvider();

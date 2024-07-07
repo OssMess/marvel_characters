@@ -5,10 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../business_logic/cubits.dart';
-import '../../../tools.dart';
-import '../../model_widgets.dart';
-import '../../tiles.dart';
+import '../../../business_logic/_cubits.dart';
+import '../../../_tools.dart';
+import '../../_model_widgets.dart';
+import '../../_tiles.dart';
 
 class CharacterDetails extends StatefulWidget {
   const CharacterDetails({

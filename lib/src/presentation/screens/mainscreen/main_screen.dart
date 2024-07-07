@@ -11,13 +11,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../../../main.dart';
-import '../../../business_logic/cubits.dart';
+import '../../../business_logic/_cubits.dart';
 import '../../../settings/settings_controller.dart';
-import '../../../tools.dart';
-import '../../../data/enums.dart';
-import '../../model_widgets.dart';
-import '../../screens.dart';
-import '../../tiles.dart';
+import '../../../_tools.dart';
+import '../../../data/_enums.dart';
+import '../../_model_widgets.dart';
+import '../../_screens.dart';
+import '../../_tiles.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({

@@ -1,5 +1,5 @@
-export 'awesome_icons.dart';
-export 'extensions.dart';
+export '_awesome_icons.dart';
+export '_extensions.dart';
 export 'tools/awesome_icons.dart';
 export 'tools/datetime_utils.dart';
 export 'tools/dialogs.dart';

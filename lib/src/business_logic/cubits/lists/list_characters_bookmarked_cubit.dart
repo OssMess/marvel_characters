@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 
-import '../../../data/models.dart';
-import '../../cubits.dart';
+import '../../../data/_models.dart';
+import '../../_cubits.dart';
 
 part 'list_characters_bookmarked_state.dart';
 

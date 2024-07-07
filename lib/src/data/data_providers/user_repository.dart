@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../business_logic/cubits.dart';
+import '../../business_logic/_cubits.dart';
 import 'firestore_path.dart';
 
 class UserRepository {

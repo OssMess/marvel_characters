@@ -1,11 +1,11 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
-import '../../../data/data_providers.dart';
-import '../../../tools.dart';
-import '../../../data/enums.dart';
-import '../../model_widgets.dart';
-import '../../screens.dart';
+import '../../../data/_data_providers.dart';
+import '../../../_tools.dart';
+import '../../../data/_enums.dart';
+import '../../_model_widgets.dart';
+import '../../_screens.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({

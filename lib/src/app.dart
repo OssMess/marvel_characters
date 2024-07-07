@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'business_logic/cubits.dart';
+import 'business_logic/_cubits.dart';
 import 'presentation/authentication_wrapper.dart';
 import 'settings/settings_controller.dart';
 import 'tools/styles.dart';

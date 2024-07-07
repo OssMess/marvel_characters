@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../extensions.dart';
+import '../../_extensions.dart';
 
 class CustomRadioButton<T> extends StatelessWidget {
   const CustomRadioButton({

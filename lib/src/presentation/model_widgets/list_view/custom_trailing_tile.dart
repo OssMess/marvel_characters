@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../extensions.dart';
-import '../../model_widgets.dart';
+import '../../../_extensions.dart';
+import '../../_model_widgets.dart';
 
 class CustomTrailingTile extends StatelessWidget {
   const CustomTrailingTile({

@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
-import '../data_providers.dart';
-import '../models.dart';
+import '../_data_providers.dart';
+import '../_models.dart';
 
 class ComicProvider {
   Future<Map<String, dynamic>> listComics({

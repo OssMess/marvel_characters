@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../cubits.dart';
-import '../../../data/models.dart';
-import '../../../data/repositories.dart';
+import '../../_cubits.dart';
+import '../../../data/_models.dart';
+import '../../../data/_repositories.dart';
 
 part 'character_state.dart';
 

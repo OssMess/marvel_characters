@@ -1,4 +1,4 @@
-import '../data/enums.dart';
+import '../data/_enums.dart';
 
 extension LottieAnimationExtensions on LottieAnimation {
   String get valueToString {

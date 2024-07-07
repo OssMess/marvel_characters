@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../data/enums.dart';
-import '../data/models_ui.dart';
-import '../presentation/dialogs.dart';
-import '../presentation/model_widgets.dart';
-import '../tools.dart';
+import '../data/_enums.dart';
+import '../data/_models_ui.dart';
+import '../presentation/_dialogs.dart';
+import '../presentation/_model_widgets.dart';
+import '../_tools.dart';
 
 class Dialogs {
   final BuildContext context;

@@ -6,10 +6,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:badges/badges.dart' as badge;
 
-import '../../business_logic/cubits.dart';
-import '../../tools.dart';
-import '../../data/models_ui.dart';
-import '../model_widgets.dart';
+import '../../business_logic/_cubits.dart';
+import '../../_tools.dart';
+import '../../data/_models_ui.dart';
+import '../_model_widgets.dart';
 
 /// Splash screen, it shows when the app is opened and is still preparing data
 class SplashScreen extends StatelessWidget {

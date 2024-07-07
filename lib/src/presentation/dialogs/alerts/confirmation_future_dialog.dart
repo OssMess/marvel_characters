@@ -3,9 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../tools.dart';
-import '../../../data/enums.dart';
-import '../../../data/models_ui.dart';
+import '../../../_tools.dart';
+import '../../../data/_enums.dart';
+import '../../../data/_models_ui.dart';
 import '../adaptive_bottom_sheet.dart';
 
 /// An `AdaptiveBottomSheet` as an alert dialog with a title, subtitle, icon,

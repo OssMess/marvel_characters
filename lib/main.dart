@@ -16,8 +16,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'firebase_options.dart';
 import 'src/app.dart';
-import 'src/data/models.dart';
-import 'src/data/enums.dart';
+import 'src/data/_models.dart';
+import 'src/data/_enums.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 

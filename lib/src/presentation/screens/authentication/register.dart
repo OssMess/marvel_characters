@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../business_logic/cubits.dart';
-import '../../../data/data_providers.dart';
-import '../../../tools.dart';
-import '../../../data/enums.dart';
-import '../../model_widgets.dart';
-import '../../screens.dart';
+import '../../../business_logic/_cubits.dart';
+import '../../../data/_data_providers.dart';
+import '../../../_tools.dart';
+import '../../../data/_enums.dart';
+import '../../_model_widgets.dart';
+import '../../_screens.dart';
 
 class Register extends StatefulWidget {
   const Register({

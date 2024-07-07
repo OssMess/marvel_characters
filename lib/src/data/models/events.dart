@@ -1,4 +1,4 @@
-import '../models.dart';
+import '../_models.dart';
 
 class Events {
   final int available;

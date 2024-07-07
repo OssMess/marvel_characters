@@ -1,4 +1,4 @@
-import '../models.dart';
+import '../_models.dart';
 
 class Characters {
   final int available;

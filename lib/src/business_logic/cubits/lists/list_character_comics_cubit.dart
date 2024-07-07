@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../../data/models.dart';
-import '../../../data/repositories.dart';
+import '../../../data/_models.dart';
+import '../../../data/_repositories.dart';
 
 part 'list_character_comics_state.dart';
 

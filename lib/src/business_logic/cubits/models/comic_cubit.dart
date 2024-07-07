@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models.dart';
+import '../../../data/_models.dart';
 
 part 'comic_state.dart';
 

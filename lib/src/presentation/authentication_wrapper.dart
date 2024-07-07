@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../business_logic/cubits.dart';
+import '../business_logic/_cubits.dart';
 import '../settings/settings_controller.dart';
-import '../tools.dart';
-import 'screens.dart';
+import '../_tools.dart';
+import '_screens.dart';
 
 /// This class is responsable for data flow down the widget tree as well as managing which widget is displayed including:
 /// - `SplashScreen`: displayed when the data is still being prepared and the app is still not ready for use,

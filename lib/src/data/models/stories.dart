@@ -1,4 +1,4 @@
-import '../models.dart';
+import '../_models.dart';
 
 class Stories {
   final int available;

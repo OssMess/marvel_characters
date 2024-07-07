@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../models.dart';
+import '../_models.dart';
 
 class Data extends Equatable {
   final int offset;

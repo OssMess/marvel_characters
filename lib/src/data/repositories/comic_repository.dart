@@ -1,6 +1,6 @@
-import '../../business_logic/cubits.dart';
-import '../data_providers.dart';
-import '../models.dart';
+import '../../business_logic/_cubits.dart';
+import '../_data_providers.dart';
+import '../_models.dart';
 
 class ComicRepository {
   final ComicProvider provider = ComicProvider();
